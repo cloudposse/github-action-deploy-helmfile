@@ -1,0 +1,15 @@
+environments:
+  preview:
+  staging:
+  production:
+  dev:
+  qa1:
+  qa2:
+  qa3:
+  qa4:
+  hotfix:
+
+helmfiles:
+  - path: {{ requiredEnv "APPLICATION_HELMFILE" }}
+    values:
+      - /tmp/platform.yaml
