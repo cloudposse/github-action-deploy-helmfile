@@ -35,7 +35,7 @@ related: []
 description: Deploy on Kubernetes with HelmFile
 
 introduction: |-
-  Deploy on Kubernetes with HelmFile. 
+  Deploy on Kubernetes with HelmFile.
 
 references:
   - name: "github-actions-workflows"
@@ -47,7 +47,7 @@ references:
 
 # How to use this project
 usage: |-
-  Deploy
+  Deploy environment
   ```yaml
     name: Pull Request
     on:
@@ -79,7 +79,7 @@ usage: |-
     ```
 
 
-  Destroy
+  Destroy environment
   ```yaml
     name: Pull Request
     on:

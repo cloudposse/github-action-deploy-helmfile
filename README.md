@@ -58,7 +58,7 @@ It's 100% Open Source and licensed under the [APACHE2](LICENSE).
 
 ## Introduction
 
-Deploy on Kubernetes with HelmFile. 
+Deploy on Kubernetes with HelmFile.
 
 
 
@@ -68,7 +68,7 @@ Deploy on Kubernetes with HelmFile.
 
 
 
-Deploy
+Deploy environment
 ```yaml
   name: Pull Request
   on:
@@ -100,7 +100,7 @@ Deploy
   ```
 
 
-Destroy
+Destroy environment
 ```yaml
   name: Pull Request
   on:
