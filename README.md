@@ -58,11 +58,7 @@ It's 100% Open Source and licensed under the [APACHE2](LICENSE).
 
 ## Introduction
 
-<<<<<<< HEAD
 Deploy on Kubernetes with HelmFile. 
-=======
-Deploy on Kubernetes with HelmFile.
->>>>>>> init
 
 
 

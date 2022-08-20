@@ -35,11 +35,7 @@ related: []
 description: Deploy on Kubernetes with HelmFile
 
 introduction: |-
-<<<<<<< HEAD
   Deploy on Kubernetes with HelmFile. 
-=======
-  Deploy on Kubernetes with HelmFile.
->>>>>>> init
 
 references:
   - name: "github-actions-workflows"
