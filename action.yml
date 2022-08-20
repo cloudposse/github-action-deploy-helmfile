@@ -1,5 +1,9 @@
 name: 'Deploy HelmFile'
 description: 'Deploy on Kubernetes with HelmFile'
+author: hello@cloudposse.com
+branding:
+  icon: 'file-text'
+  color: 'white'
 inputs:
   cluster:
     description: Cluster name
