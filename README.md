@@ -68,7 +68,7 @@ Deploy on Kubernetes with HelmFile.
 
 
 
-Deploy
+Deploy environment
 ```yaml
   name: Pull Request
   on:
@@ -100,7 +100,7 @@ Deploy
   ```
 
 
-Destroy
+Destroy environment
 ```yaml
   name: Pull Request
   on:
