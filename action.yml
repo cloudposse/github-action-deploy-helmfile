@@ -41,7 +41,7 @@ inputs:
     required: true
   debug:
     description: Debug mode
-    default: false
+    default: 'false'
     required: false
 outputs:
   webapp-url:
