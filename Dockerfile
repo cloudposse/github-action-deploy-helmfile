@@ -1,4 +1,4 @@
-FROM cloudposse/geodesic:0.147.11-alpine
+FROM cloudposse/geodesic:1.3.0-alpine
 
 
 ENV ASSUME_ROLE_INTERACTIVE=false
