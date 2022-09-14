@@ -1,6 +1,5 @@
 FROM cloudposse/geodesic:1.3.0-alpine
 
-
 ENV ASSUME_ROLE_INTERACTIVE=false
 ENV AWS_SAML2AWS_ENABLED=false
 ENV AWS_VAULT_ENABLED=false
