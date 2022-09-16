@@ -4,27 +4,8 @@ set -e
 
 export APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
 
-# mkdir -p /localhost/.aws
-# 
-# cat <<EOT > /localhost/.aws/config
-# [profile cicd]
-# region = ${AWS_REGION}
-# 
-# [profile default]
-# region = ${AWS_REGION}
-# role_arn = ${CLUSTER_ROLE}
-# source_profile = cicd
-# EOT
-# 
-# cat /localhost/.aws/config
- 
 source /etc/profile.d/aws.sh
  
-# # Used for debugging
-# aws sts --region ${AWS_REGION} get-caller-identity
-# 
-# assume-role default 
-
 # Used for debugging
 aws sts --region ${AWS_REGION} get-caller-identity
 
