@@ -11,7 +11,6 @@ mkdir -p /localhost/.aws
 cat <<EOT > /localhost/.aws/config
 [profile cicd]
 region = ${AWS_REGION}
-role_arn = ${BASE_ROLE}
 
 [profile default]
 region = ${AWS_REGION}
