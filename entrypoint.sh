@@ -20,11 +20,19 @@ EOT
 
 source /etc/profile.d/aws.sh
 
+# Used for debugging
+aws sts --region ${AWS_REGION} get-caller-identity
+
+assume-role default 
+
+# Used for debugging
+aws sts --region ${AWS_REGION} get-caller-identity
+
 # Login to Kubernetes Cluster.
-assume-role default aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME}
+aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME}
 
 # Read platform specific configs/info
-assume-role default chamber export platform/${CLUSTER_NAME}/${ENVIRONMENT} --format yaml | yq --exit-status --no-colors  eval '{"platform": .}' - > /tmp/platform.yaml
+chamber export platform/${CLUSTER_NAME}/${ENVIRONMENT} --format yaml | yq --exit-status --no-colors  eval '{"platform": .}' - > /tmp/platform.yaml
 
 DEBUG_ARGS=""
 
