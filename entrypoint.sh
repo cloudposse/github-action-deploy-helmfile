@@ -2,6 +2,8 @@
 
 set -e
 
+echo "entering entrypoint.sh"
+
 export APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
 
 mkdir -p /localhost/.aws
@@ -10,13 +12,14 @@ cat <<EOT > /localhost/.aws/config
 [profile cicd]
 region = ${AWS_REGION}
 role_arn = ${BASE_ROLE}
-credential_source = Ec2InstanceMetadata
 
 [profile default]
 region = ${AWS_REGION}
 role_arn = ${CLUSTER_ROLE}
 source_profile = cicd
 EOT
+
+cat /localhost/.aws/config
 
 source /etc/profile.d/aws.sh
 
