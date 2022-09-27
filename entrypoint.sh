@@ -4,27 +4,16 @@ set -e
 
 export APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
 
-mkdir -p /localhost/.aws
-
-cat <<EOT > /localhost/.aws/config
-[profile cicd]
-region = ${AWS_REGION}
-role_arn = ${BASE_ROLE}
-credential_source = Ec2InstanceMetadata
-
-[profile default]
-region = ${AWS_REGION}
-role_arn = ${CLUSTER_ROLE}
-source_profile = cicd
-EOT
-
 source /etc/profile.d/aws.sh
+ 
+# Used for debugging
+aws sts --region ${AWS_REGION} get-caller-identity
 
 # Login to Kubernetes Cluster.
-assume-role default aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME}
+aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME}
 
 # Read platform specific configs/info
-assume-role default chamber export platform/${CLUSTER_NAME}/${ENVIRONMENT} --format yaml | yq --exit-status --no-colors  eval '{"platform": .}' - > /tmp/platform.yaml
+chamber export platform/${CLUSTER_NAME}/${ENVIRONMENT} --format yaml | yq --exit-status --no-colors  eval '{"platform": .}' - > /tmp/platform.yaml
 
 DEBUG_ARGS=""
 

@@ -12,12 +12,6 @@ inputs:
     description: AWS region
     required: false
     default: us-east-1
-  base-role:
-    description: Base role arn
-    required: true
-  cluster-role:
-    description: Cluster role arn
-    required: true
   helmfile-path:
     description: The path where lives the helmfile.
     required: false
@@ -62,7 +56,5 @@ runs:
     IMAGE_NAME: ${{ inputs.image }}
     IMAGE_TAG: ${{ inputs.image-tag }}
     OPERATION: ${{ inputs.operation }}
-    BASE_ROLE: ${{ inputs.base-role }}
     CLUSTER_NAME: ${{ inputs.cluster }}
-    CLUSTER_ROLE: ${{ inputs.cluster-role }}
     HELM_DEBUG: ${{ inputs.debug }}
