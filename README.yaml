@@ -63,6 +63,12 @@ usage: |-
           url: ${{ steps.deploy.outputs.webapp-url }}  
         steps:
           
+          - name: Configure AWS Credentials
+            uses: aws-actions/configure-aws-credentials@v1.7.0
+            with:
+              aws-region: us-west-2
+              role-to-assume: arn:aws:iam::111111111111:role/preview
+              role-session-name: deploy
         
           - name: Deploy
             uses: cloudposse/github-action-deploy-helmfile@main
@@ -91,7 +97,12 @@ usage: |-
       destroy:
         runs-on: ubuntu-latest
         steps:
-          
+          - name: Configure AWS Credentials
+            uses: aws-actions/configure-aws-credentials@v1.7.0
+            with:
+              aws-region: us-west-2
+              role-to-assume: arn:aws:iam::111111111111:role/preview
+              role-session-name: destroy          
         
           - name: Destroy
             uses: cloudposse/github-action-deploy-helmfile@main
