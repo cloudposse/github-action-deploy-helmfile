@@ -83,13 +83,19 @@ Deploy environment
         name: preview
         url: ${{ steps.deploy.outputs.webapp-url }}  
       steps:
+        
+        - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v1.7.0
+          with:
+            aws-region: us-west-2
+            role-to-assume: arn:aws:iam::111111111111:role/preview
+            role-session-name: deploy
+      
         - name: Deploy
           uses: cloudposse/github-action-deploy-helmfile@main
           id: deploy
           with:
             aws-region: us-west-2
-            base-role: 'arn:aws:iam::111111111111:role/indentity'
-            cluster-role: 'arn:aws:iam::222222222222:role/preview'
             cluster: preview-eks
             environment: preview
             namespace: preview
@@ -112,13 +118,18 @@ Destroy environment
     destroy:
       runs-on: ubuntu-latest
       steps:
+        - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v1.7.0
+          with:
+            aws-region: us-west-2
+            role-to-assume: arn:aws:iam::111111111111:role/preview
+            role-session-name: destroy          
+      
         - name: Destroy
           uses: cloudposse/github-action-deploy-helmfile@main
           id: destroy
           with:
             aws-region: us-west-2
-            base-role: 'arn:aws:iam::111111111111:role/indentity'
-            cluster-role: 'arn:aws:iam::222222222222:role/preview'
             cluster: preview-eks
             environment: preview
             namespace: preview
@@ -139,9 +150,7 @@ Destroy environment
 | Name | Description | Default | Required |
 |------|-------------|---------|----------|
 | aws-region | AWS region | us-east-1 | false |
-| base-role | Base role arn | N/A | true |
 | cluster | Cluster name | N/A | true |
-| cluster-role | Cluster role arn | N/A | true |
 | debug | Debug mode | false | false |
 | environment | Helmfile environment | preview | false |
 | helmfile | Helmfile name | helmfile.yaml | false |

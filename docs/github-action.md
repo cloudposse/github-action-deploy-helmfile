@@ -4,9 +4,7 @@
 | Name | Description | Default | Required |
 |------|-------------|---------|----------|
 | aws-region | AWS region | us-east-1 | false |
-| base-role | Base role arn | N/A | true |
 | cluster | Cluster name | N/A | true |
-| cluster-role | Cluster role arn | N/A | true |
 | debug | Debug mode | false | false |
 | environment | Helmfile environment | preview | false |
 | helmfile | Helmfile name | helmfile.yaml | false |
