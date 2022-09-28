@@ -26,6 +26,7 @@ jobs:
 
       - run: kubectl get nodes
       - run: cd ~/.kube/ && pwd
+      - run: echo ${HOME}
 
       - name: Checkout
         uses: actions/checkout@v3
