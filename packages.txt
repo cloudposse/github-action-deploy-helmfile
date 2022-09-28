@@ -1,0 +1,9 @@
+# Essential alpine packages
+bash
+chamber@cloudposse
+curl
+git
+helm@cloudposse
+helm3@cloudposse
+helmfile@cloudposse
+sudo

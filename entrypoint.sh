@@ -2,6 +2,12 @@
 
 set -e
 
+
+apk upgrade --update
+apk add -u \
+		helm@cloudposse==${HELM_VERSION} \
+		helmfile@cloudposse==${HELMFILE_VERSION}
+
 export APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
 
 if [[ ! -z  "${AWS_REGION}" ]]; then
