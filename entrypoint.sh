@@ -9,7 +9,7 @@ source /etc/profile.d/aws.sh
 # Used for debugging
 aws sts --region ${AWS_REGION} get-caller-identity
 
-if [[ "${AWS_REGION}" != "" ] && [ "${CLUSTER_NAME}" != "" ]]; then
+if [[ "${AWS_REGION}" != "" && "${CLUSTER_NAME}" != "" ]]; then
 # Login to Kubernetes Cluster.
 aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME}
 fi
