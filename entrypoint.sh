@@ -10,12 +10,8 @@ apk add -u \
 
 export APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
 
-if [[ ! -z  "${AWS_REGION}" ]]; then
-source /etc/profile.d/aws.sh
-
 # Used for debugging
-aws sts --region ${AWS_REGION} get-caller-identity
-fi
+aws sts --region ${AWS_REGION} get-caller-identity || echo "AWS is not authorized"
 
 if [[ ! -z  "${AWS_REGION}"  && ! -z  "${CLUSTER_NAME}" ]]; then
 # Login to Kubernetes Cluster.
