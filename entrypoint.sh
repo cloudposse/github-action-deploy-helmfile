@@ -16,9 +16,7 @@ aws sts --region ${AWS_REGION} get-caller-identity || echo "AWS is not authorize
 if [[ ! -z  "${AWS_REGION}"  && ! -z  "${CLUSTER_NAME}" ]]; then
 # Login to Kubernetes Cluster.
 aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME}
-fi
 
-if [[ ! -z  "${AWS_REGION}" ]]; then
 # Read platform specific configs/info
 chamber export platform/${CLUSTER_NAME}/${ENVIRONMENT} --format yaml | yq --exit-status --no-colors  eval '{"platform": .}' - > /tmp/platform.yaml
 fi
