@@ -36,6 +36,7 @@ jobs:
           image: nginx
           image-tag: latest
           operation: deploy
+          debug: true
 
 
     outputs:
