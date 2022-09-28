@@ -33,11 +33,11 @@ fi
 
 if [[ "${OPERATION}" == "deploy" ]]; then
 
-	OPERATION_COMMAND="helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml $DEBUG_ARGS apply"
+	OPERATION_COMMAND="helmfile --namespace ${NAMESPACE} --file /deploy/helmfile.yaml $DEBUG_ARGS apply"
 	echo "Executing: ${OPERATION_COMMAND}"
 	${OPERATION_COMMAND}
 
-	RELEASES=$(helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml list --output json | jq .[].name -r)
+	RELEASES=$(helmfile --namespace ${NAMESPACE} --file /deploy/helmfile.yaml list --output json | jq .[].name -r)
 	for RELEASE in ${RELEASES}
   do
   	ENTRYPOINT=$(kubectl --namespace ${NAMESPACE} get -l release=${RELEASE} ingress --output=jsonpath='{.items[*].metadata.annotations.outputs\.platform\.cloudposse\.com/webapp-url}')
