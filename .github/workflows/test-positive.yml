@@ -25,6 +25,7 @@ jobs:
           github-token: ${{ secrets.PUBLIC_REPO_ACCESS_TOKEN }}
 
       - run: kubectl get nodes
+      - run: echo ${KUBECONFIG}
 
       - name: Checkout
         uses: actions/checkout@v3
