@@ -25,7 +25,7 @@ jobs:
           github-token: ${{ secrets.PUBLIC_REPO_ACCESS_TOKEN }}
 
       - run: kubectl get nodes
-      - run: cat ./.kube/config
+      - run: cd ~/.kube/ && pwd
 
       - name: Checkout
         uses: actions/checkout@v3
