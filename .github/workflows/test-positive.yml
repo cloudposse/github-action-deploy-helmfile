@@ -30,8 +30,6 @@ jobs:
       - uses: ./
         id: current
         with:
-          aws-region: us-west-2
-          cluster: test
           environment: default
           namespace: default
           image: nginx
