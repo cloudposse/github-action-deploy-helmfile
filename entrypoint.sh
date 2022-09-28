@@ -8,6 +8,11 @@ apk add -u \
 		helm@cloudposse==${HELM_VERSION} \
 		helmfile@cloudposse==${HELMFILE_VERSION}
 
+helm3 plugin install https://github.com/databus23/helm-diff.git --version v${HELM_DIFF_VERSION} \
+	&& helm3 plugin install https://github.com/aslafy-z/helm-git.git --version ${HELM_GIT_VERSION} \
+	&& rm -rf $XDG_CACHE_HOME/helm
+
+
 export APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
 
 # Used for debugging
