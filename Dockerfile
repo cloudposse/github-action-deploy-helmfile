@@ -20,11 +20,11 @@ RUN sed -i 's|http://dl-cdn.alpinelinux.org|https://alpine.global.ssl.fastly.net
 ##########################################################################################
 
 # Install alpine package manifest
-COPY packages.txt os/alpine/packages-alpine.txt /etc/apk/
+COPY packages.txt  /etc/apk/
 
 ## Here is where we would copy in the repo checksum in an attempt to ensure updates bust the Docker build cache
 
-RUN apk add --update $(grep -h -v '^#' /etc/apk/packages.txt /etc/apk/packages-alpine.txt) && \
+RUN apk add --update $(grep -h -v '^#' /etc/apk/packages.txt) && \
     mkdir -p /etc/bash_completion.d/ /etc/profile.d/ /conf && \
     touch /conf/.gitconfig
 
