@@ -1,0 +1,5 @@
+cryptography==38.0.1
+PyYAML==5.4.1
+awscli==1.25.81
+boto==2.49.0
+boto3==1.24.80
