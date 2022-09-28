@@ -1,10 +1,5 @@
 environments:
   default:
-    values:
-      - platform:
-          region: us-east-2
-          default_ingress_domain: example.com
-          default_alb_ingress_group: default
 
 repositories:
   # Cloud Posse incubator repo of helm charts
@@ -51,9 +46,9 @@ releases:
             enabled: true
             port: default
             annotations:
-              outputs.platform.cloudposse.com/webapp-url: "https://example-app.{{ .Values.platform.default_ingress_domain }}/dashboard"
+              outputs.platform.cloudposse.com/webapp-url: "https://app.example.com/dashboard"
             hosts:
-              "example-app.{{ .Values.platform.default_ingress_domain }}": /*
+              "app.example.com": /*
 
         resources:
           requests:
