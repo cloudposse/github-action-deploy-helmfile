@@ -7,3 +7,4 @@ helm@cloudposse
 helm3@cloudposse
 helmfile@cloudposse
 sudo
+diffutils
