@@ -51,7 +51,7 @@ releases:
             enabled: true
             port: default
             annotations:
-              outputs.platform.cloudposse.com/webapp-url: "https://example-app.{{ .Values.platform.default_ingress_domaindefault_ingress_domain }}/dashboard"
+              outputs.platform.cloudposse.com/webapp-url: "https://example-app.{{ .Values.platform.default_ingress_domain }}/dashboard"
             hosts:
               "example-app.{{ .Values.platform.default_ingress_domain }}": /*
 
