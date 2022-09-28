@@ -50,6 +50,12 @@ RUN echo "net.ipv6.conf.all.disable_ipv6=0" > /etc/sysctl.d/00-ipv6.conf
 
 ENV HELM_VERSION 3.7.2-r0
 ENV HELMFILE_VERSION 0.142.0-r0
+ENV HELM_DIFF_VERSION 3.5.0
+ENV HELM_GIT_VERSION 0.11.2
+
+RUN helm3 plugin install https://github.com/databus23/helm-diff.git --version v${HELM_DIFF_VERSION} \
+    && helm3 plugin install https://github.com/aslafy-z/helm-git.git --version ${HELM_GIT_VERSION} \
+    && rm -rf $XDG_CACHE_HOME/helm
 
 ENTRYPOINT ["/bin/bash"]
 
