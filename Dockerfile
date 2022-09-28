@@ -35,6 +35,8 @@ RUN echo "net.ipv6.conf.all.disable_ipv6=0" > /etc/sysctl.d/00-ipv6.conf
 ENV HELM_VERSION 3.7.2-r0
 ENV HELMFILE_VERSION 0.142.0-r0
 
+ENTRYPOINT ["/bin/bash"]
+
 COPY entrypoint.sh /usr/local/bin/entrypoint
 COPY ./root /
 

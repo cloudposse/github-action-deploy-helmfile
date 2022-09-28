@@ -17,7 +17,7 @@ source /etc/profile.d/aws.sh
 aws sts --region ${AWS_REGION} get-caller-identity
 fi
 
-if [[ ! -z  "${AWS_REGION}" ] && [ ! -z  "${CLUSTER_NAME}" ]]; then
+if [[ ! -z  "${AWS_REGION}"  && ! -z  "${CLUSTER_NAME}" ]]; then
 # Login to Kubernetes Cluster.
 aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME}
 fi
