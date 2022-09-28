@@ -1,4 +1,5 @@
 environments:
+  default:
   preview:
   staging:
   production:
@@ -11,6 +12,5 @@ environments:
 
 helmfiles:
   - path: {{ requiredEnv "APPLICATION_HELMFILE" }}
-#
-#    values:
-#      - /tmp/platform.yaml
+    values:
+      - /tmp/platform.yaml
