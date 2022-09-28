@@ -11,5 +11,6 @@ environments:
 
 helmfiles:
   - path: {{ requiredEnv "APPLICATION_HELMFILE" }}
-    values:
-      - /tmp/platform.yaml
+#
+#    values:
+#      - /tmp/platform.yaml
