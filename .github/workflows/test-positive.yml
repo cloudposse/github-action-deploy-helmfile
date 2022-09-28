@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: nolar/setup-k3d-k3s@v1
         with:
-          version: v1.21.2+k3s1  # E.g.: v1.21, v1.21.2, v1.21.2+k3s1
+          version: v1.25.0+k3s1  # E.g.: v1.21, v1.21.2, v1.21.2+k3s1
           github-token: ${{ secrets.PUBLIC_REPO_ACCESS_TOKEN }}
 
       - name: Checkout
