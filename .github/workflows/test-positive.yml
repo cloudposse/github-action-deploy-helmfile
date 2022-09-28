@@ -30,7 +30,14 @@ jobs:
       - uses: ./
         id: current
         with:
-          param1: 'true'
+          aws-region: us-west-2
+          cluster: test
+          environment: default
+          namespace: default
+          image: nginx
+          image-tag: latest
+          operation: deploy
+
 
     outputs:
       result: "${{ steps.current.outputs.result1 }}"

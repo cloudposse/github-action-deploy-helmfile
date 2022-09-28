@@ -1,0 +1,64 @@
+environments:
+  default:
+    values:
+      - platform:
+          region: us-east-2
+          default_ingress_domain: example.com
+          default_alb_ingress_group: default
+
+repositories:
+  # Cloud Posse incubator repo of helm charts
+  - name: "cloudposse-incubator"
+    url: "https://charts.cloudposse.com/incubator/"
+
+releases:
+  #
+  # References:
+  #   - https://github.com/cloudposse/charts/blob/master/incubator/monochart
+  #
+  - name: 'default'
+    chart: "cloudposse-incubator/monochart"
+    version: "0.22.0"
+    wait: true
+    force: true
+    recreatePods: false
+    values:
+      - image:
+          repository: 'nginx'
+          tag: '1.23.1-alpine'
+          pullPolicy: Always
+        replicaCount: 1
+        # Deployment configuration
+        deployment:
+          enabled: true
+          strategy:
+            type: "RollingUpdate"
+            rollingUpdate:
+              maxUnavailable: 1
+          revisionHistoryLimit: 10
+
+        # Service endpoint
+        service:
+          enabled: true
+          type: ClusterIP
+          ports:
+            default:
+              internal: 8080
+              external: 80
+
+        ingress:
+          default:
+            enabled: true
+            port: default
+            annotations:
+              outputs.platform.cloudposse.com/webapp-url: "https://example-app.{{ .Values.platform.default_ingress_domain }}/dashboard"
+            hosts:
+              "example-app.{{ .Values.platform.default_ingress_domain }}": /*
+
+        resources:
+          requests:
+            memory: 10Mi
+            cpu: 100m
+          limits:
+            memory: 10Mi
+            cpu: 100m
