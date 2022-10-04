@@ -1,4 +1,5 @@
 <!-- markdownlint-disable -->
+
 ## Inputs
 
 | Name | Description | Default | Required |
@@ -13,6 +14,7 @@
 | image-tag | Docker image tag | N/A | true |
 | namespace | Kubernetes namespace | N/A | true |
 | operation | Operation with helmfiles. (valid options - `deploy`, `destroy`) | deploy | true |
+
 
 ## Outputs
 
