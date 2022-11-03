@@ -18,17 +18,17 @@ chamber export platform/${CLUSTER_NAME}/${ENVIRONMENT} --format yaml | yq --exit
 DEBUG_ARGS=""
 
 if [[ "${HELM_DEBUG}" == "true" ]]; then
-#	helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml template
+#	helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file ${APPLICATION_HELMFILE} template
 	DEBUG_ARGS=" --debug"
 fi
 
 if [[ "${OPERATION}" == "deploy" ]]; then
 
-	OPERATION_COMMAND="helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml $DEBUG_ARGS apply"
+	OPERATION_COMMAND="helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file ${APPLICATION_HELMFILE} $DEBUG_ARGS apply"
 	echo "Executing: ${OPERATION_COMMAND}"
 	${OPERATION_COMMAND}
 
-	RELEASES=$(helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml list --output json | jq .[].name -r)
+	RELEASES=$(helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file ${APPLICATION_HELMFILE} list --output json | jq .[].name -r)
 	for RELEASE in ${RELEASES}
   do
   	ENTRYPOINT=$(kubectl --namespace ${NAMESPACE} get -l release=${RELEASE} ingress --output=jsonpath='{.items[*].metadata.annotations.outputs\.webapp-url}')
@@ -47,7 +47,7 @@ elif [[ "${OPERATION}" == "destroy" ]]; then
 	set -e
 
 	if [[ ${NAMESPACE_EXISTS} -eq 0  ]]; then
-		OPERATION_COMMAND="helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml $DEBUG_ARGS destroy"
+		OPERATION_COMMAND="helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file ${APPLICATION_HELMFILE} $DEBUG_ARGS destroy"
 		echo "Executing: ${OPERATION_COMMAND}"
 		${OPERATION_COMMAND}
 
