@@ -28,6 +28,10 @@ inputs:
     description: Helmfile environment
     required: false
     default: preview
+  gitref-sha:
+    description: Git SHA
+    required: false
+    default: ''
   namespace:
     description: Kubernetes namespace
     required: true
@@ -56,5 +60,6 @@ runs:
     IMAGE_NAME: ${{ inputs.image }}
     IMAGE_TAG: ${{ inputs.image-tag }}
     OPERATION: ${{ inputs.operation }}
+    GITREF_SHA: ${{ inputs.gitref-sha }}
     CLUSTER_NAME: ${{ inputs.cluster }}
     HELM_DEBUG: ${{ inputs.debug }}
