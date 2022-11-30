@@ -19,13 +19,28 @@ jobs:
     continue-on-error: true
     needs: [setup]
     steps:
+      - uses: debianmaster/actions-k3s@master
+        with:
+          version: v1.21.2-k3s1  # E.g.: v1.21, v1.21.2, v1.21.2+k3s1
+
+      - run: kubectl get nodes
+      - run: cd ~/.kube/ && pwd
+      - run: echo ${HOME}
+
       - name: Checkout
         uses: actions/checkout@v3
 
       - uses: ./
         id: current
         with:
-          param1: 'true'
+          helmfile-path: test
+          environment: default
+          namespace: default
+          image: nginx
+          image-tag: latest
+          operation: deploy
+          debug: true
+
 
     outputs:
       result: "${{ steps.current.outputs.result1 }}"

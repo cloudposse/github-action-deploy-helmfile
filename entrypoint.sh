@@ -2,18 +2,32 @@
 
 set -e
 
+
+apk upgrade --update
+apk add -u \
+		helm@cloudposse==${HELM_VERSION} \
+		helmfile@cloudposse==${HELMFILE_VERSION}
+
+helm3 plugin install https://github.com/databus23/helm-diff.git --version v${HELM_DIFF_VERSION} \
+	&& helm3 plugin install https://github.com/aslafy-z/helm-git.git --version ${HELM_GIT_VERSION} \
+	&& rm -rf $XDG_CACHE_HOME/helm
+
+
 export APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
 
-source /etc/profile.d/aws.sh
- 
 # Used for debugging
-aws sts --region ${AWS_REGION} get-caller-identity
+aws sts --region ${AWS_REGION} get-caller-identity || echo "AWS is not authorized"
 
+if [[ ! -z  "${AWS_REGION}"  && ! -z  "${CLUSTER_NAME}" ]]; then
 # Login to Kubernetes Cluster.
 aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME}
 
 # Read platform specific configs/info
 chamber export platform/${CLUSTER_NAME}/${ENVIRONMENT} --format yaml | yq --exit-status --no-colors  eval '{"platform": .}' - > /tmp/platform.yaml
+else
+	touch /tmp/platform.yaml
+fi
+
 
 DEBUG_ARGS=""
 
