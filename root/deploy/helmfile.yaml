@@ -3,6 +3,7 @@ environments:
   staging:
   production:
   dev:
+  qa:
   qa1:
   qa2:
   qa3:
