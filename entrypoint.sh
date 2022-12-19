@@ -31,12 +31,11 @@ if [[ "${OPERATION}" == "deploy" ]]; then
 	RELEASES=$(helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml list --output json | jq .[].name -r)
 	for RELEASE in ${RELEASES}
   do
-  	ENTRYPOINT=$(kubectl --namespace ${NAMESPACE} get -l release=${RELEASE} ingress --output=jsonpath='{.items[*].metadata.annotations.outputs\.webapp-url}')
-  	if [[ "${ENTRYPOINT}" != "" ]]; then
-  		echo "::set-output name=webapp-url::${ENTRYPOINT}"
+	ENTRYPOINT=$(kubectl --namespace ${NAMESPACE} get -l ${RELEASE_LABEL_NAME}=${RELEASE} ingress --output=jsonpath='{.items[*].metadata.annotations.outputs\.webapp-url}')
+		if [[ "${ENTRYPOINT}" != "" ]]; then
+			echo "::set-output name=webapp-url::${ENTRYPOINT}"
   	fi
   done
-
 
 
 elif [[ "${OPERATION}" == "destroy" ]]; then
