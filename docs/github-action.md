@@ -15,6 +15,7 @@
 | image-tag | Docker image tag | N/A | true |
 | namespace | Kubernetes namespace | N/A | true |
 | operation | Operation with helmfiles. (valid options - `deploy`, `destroy`) | deploy | true |
+| release\_label\_name | The name of the label used to describe the helm release | release | false |
 
 
 ## Outputs
