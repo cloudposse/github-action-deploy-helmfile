@@ -161,6 +161,7 @@ Destroy environment
 | image-tag | Docker image tag | N/A | true |
 | namespace | Kubernetes namespace | N/A | true |
 | operation | Operation with helmfiles. (valid options - `deploy`, `destroy`) | deploy | true |
+| release\_label\_name | The name of the label used to describe the helm release | release | false |
 
 
 ## Outputs
@@ -265,7 +266,7 @@ In general, PRs are welcome. We follow the typical "fork-and-pull" Git workflow.
 
 ## Copyright
 
-Copyright © 2017-2022 [Cloud Posse, LLC](https://cpco.io/copyright)
+Copyright © 2017-2023 [Cloud Posse, LLC](https://cpco.io/copyright)
 
 
 
