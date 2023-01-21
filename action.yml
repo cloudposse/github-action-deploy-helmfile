@@ -49,6 +49,9 @@ inputs:
     description: The name of the label used to describe the helm release
     default: "release"
     required: false
+  values:
+    description: Extra values to pass to the helm action (comma-separated NAME=VAL pairs)
+    required: false
 outputs:
   webapp-url:
     description: "Web Application url"
@@ -58,6 +61,7 @@ runs:
   env:
     AWS_REGION: ${{ inputs.aws-region }}
     ENVIRONMENT: ${{ inputs.environment }}
+    HELM_VALUES: ${{ inputs.values }}
     HELMFILE: ${{ inputs.helmfile }}
     HELMFILE_PATH: ${{ inputs.helmfile-path }}
     NAMESPACE: ${{ inputs.namespace }}
