@@ -22,7 +22,7 @@ if [[ "${HELM_DEBUG}" == "true" ]]; then
 	DEBUG_ARGS=" --debug"
 fi
 
-if [[ -z "$HELM_VALUES" ]]; then
+if [[ -n "$HELM_VALUES" ]]; then
   HELM_VALUES_FLAG="--set ${HELM_VALUES}"
 fi
 
