@@ -23,7 +23,7 @@ if [[ "${HELM_DEBUG}" == "true" ]]; then
 fi
 
 if [[ -n "$HELM_VALUES" ]]; then
-  HELM_VALUES_FLAG="--set ${HELM_VALUES}"
+  HELM_VALUES_FLAG="--state-values-set ${HELM_VALUES}"
 fi
 
 if [[ "${OPERATION}" == "deploy" ]]; then
