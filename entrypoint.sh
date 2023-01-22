@@ -32,7 +32,7 @@ if [[ "${OPERATION}" == "deploy" ]]; then
 	echo "Executing: ${OPERATION_COMMAND}"
 	${OPERATION_COMMAND}
 
-	RELEASES=$(helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml list --output json | jq .[].name -r)
+	RELEASES=$(helmfile ${HELM_VALUES_FLAG} --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml list --output json | jq .[].name -r)
 	for RELEASE in ${RELEASES}
   do
 	ENTRYPOINT=$(kubectl --namespace ${NAMESPACE} get -l ${RELEASE_LABEL_NAME}=${RELEASE} ingress --output=jsonpath='{.items[*].metadata.annotations.outputs\.webapp-url}')
