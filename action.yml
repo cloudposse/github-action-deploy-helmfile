@@ -47,7 +47,7 @@ inputs:
     required: false
   release_label_name:
     description: The name of the label used to describe the helm release
-    default: 'release'
+    default: "release"
     required: false
   values:
     description: Extra values to pass to the helm action (comma-separated NAME=VAL pairs)
@@ -57,7 +57,7 @@ inputs:
     required: false
 outputs:
   webapp-url:
-    description: 'Web Application url'
+    description: "Web Application url"
 runs:
   using: 'docker'
   image: 'Dockerfile'
