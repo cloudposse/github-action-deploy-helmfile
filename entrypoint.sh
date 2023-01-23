@@ -29,6 +29,7 @@ fi
 
 # apprach 2: contents of a file to include in helmfile.yaml
 if [[ -n "$HELM_VALUES_YAML" ]]; then
+  echo -e "Using extra values:\n${HELM_VALUES_YAML}"
   export HELM_VALUES_FILE="/tmp/extra_helm_values.yml"
   echo "$HELM_VALUES_YAML" > "$HELM_VALUES_FILE"
 fi
