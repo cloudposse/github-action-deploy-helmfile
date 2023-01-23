@@ -65,5 +65,5 @@ elif [[ "${OPERATION}" == "destroy" ]]; then
     if [[ "${RELEASES_COUNTS}" == "0" ]]; then
     	kubectl delete ns ${NAMESPACE}
     fi
-	fi
+  fi
 fi
