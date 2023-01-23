@@ -52,6 +52,9 @@ inputs:
   values:
     description: Extra values to pass to the helm action (comma-separated NAME=VAL pairs)
     required: false
+  values_file:
+    description: Contents of a values file to use in the deployment
+    required: false
 outputs:
   webapp-url:
     description: "Web Application url"
@@ -62,6 +65,7 @@ runs:
     AWS_REGION: ${{ inputs.aws-region }}
     ENVIRONMENT: ${{ inputs.environment }}
     HELM_VALUES: ${{ inputs.values }}
+    HELM_VALUES_FILE_CONTENTS: ${{ inputs.values_file }}
     HELMFILE: ${{ inputs.helmfile }}
     HELMFILE_PATH: ${{ inputs.helmfile-path }}
     NAMESPACE: ${{ inputs.namespace }}
