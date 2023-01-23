@@ -49,9 +49,6 @@ inputs:
     description: The name of the label used to describe the helm release
     default: "release"
     required: false
-  values:
-    description: Extra values to pass to the helm action (comma-separated NAME=VAL pairs)
-    required: false
   values_yaml:
     description: YAML string with extra values to use in a helmfile deploy
     required: false
@@ -64,7 +61,6 @@ runs:
   env:
     AWS_REGION: ${{ inputs.aws-region }}
     ENVIRONMENT: ${{ inputs.environment }}
-    HELM_VALUES: ${{ inputs.values }}
     HELM_VALUES_YAML: ${{ inputs.values_yaml }}
     HELMFILE: ${{ inputs.helmfile }}
     HELMFILE_PATH: ${{ inputs.helmfile-path }}
