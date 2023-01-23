@@ -22,19 +22,26 @@ if [[ "${HELM_DEBUG}" == "true" ]]; then
 	DEBUG_ARGS=" --debug"
 fi
 
+# approach 1: --state-values-set flag. This doesn't seem to propagate from helmfile.yaml to the imported release helmfile
 if [[ -n "$HELM_VALUES" ]]; then
   HELM_VALUES_FLAG="--state-values-set ${HELM_VALUES}"
+fi
+
+# apprach 2: contents of a file to include
+if [[ -n "$HELM_VALUES_FILE_CONTENTS" ]]; then
+  export HELM_VALUES_FILE="/tmp/extra_helm_values.yml"
+  echo "$HELM_VALUES_FILE_CONTENTS" > "$HELM_VALUES_FILE"
 fi
 
 if [[ "${OPERATION}" == "deploy" ]]; then
 	echo "Deploying..."
 
-	OPERATION_COMMAND="helmfile ${HELM_VALUES_FLAG} --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml $DEBUG_ARGS apply"
+	OPERATION_COMMAND="helmfile ${HELM_VALUES_FLAG} ${HELM_VALUES_FILE_FLAG} --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml $DEBUG_ARGS apply"
 	echo "Executing: ${OPERATION_COMMAND}"
 	${OPERATION_COMMAND}
 
   echo "Listing releases..."
-	RELEASES=$(helmfile ${HELM_VALUES_FLAG} --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml list --output json | jq .[].name -r)
+	RELEASES=$(helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml list --output json | jq .[].name -r)
 	for RELEASE in ${RELEASES}
   do
 	ENTRYPOINT=$(kubectl --namespace ${NAMESPACE} get -l ${RELEASE_LABEL_NAME}=${RELEASE} ingress --output=jsonpath='{.items[*].metadata.annotations.outputs\.webapp-url}')

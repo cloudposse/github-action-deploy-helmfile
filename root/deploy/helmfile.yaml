@@ -14,3 +14,6 @@ helmfiles:
   - path: {{ requiredEnv "APPLICATION_HELMFILE" }}
     values:
       - /tmp/platform.yaml
+      {{- if env "HELM_VALUES_FILE" }}
+      - {{ env "HELM_VALUES_FILE" }}
+      {{- end }}
