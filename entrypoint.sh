@@ -27,10 +27,10 @@ if [[ -n "$HELM_VALUES" ]]; then
   HELM_VALUES_FLAG="--state-values-set ${HELM_VALUES}"
 fi
 
-# apprach 2: contents of a file to include
-if [[ -n "$HELM_VALUES_FILE_CONTENTS" ]]; then
+# apprach 2: contents of a file to include in helmfile.yaml
+if [[ -n "$HELM_VALUES_YAML" ]]; then
   export HELM_VALUES_FILE="/tmp/extra_helm_values.yml"
-  echo "$HELM_VALUES_FILE_CONTENTS" > "$HELM_VALUES_FILE"
+  echo "$HELM_VALUES_YAML" > "$HELM_VALUES_FILE"
 fi
 
 if [[ "${OPERATION}" == "deploy" ]]; then

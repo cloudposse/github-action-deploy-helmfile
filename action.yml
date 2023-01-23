@@ -1,9 +1,9 @@
-name: 'Deploy HelmFile'
-description: 'Deploy on Kubernetes with HelmFile'
+name: "Deploy HelmFile"
+description: "Deploy on Kubernetes with HelmFile"
 author: hello@cloudposse.com
 branding:
-  icon: 'file-text'
-  color: 'white'
+  icon: "file-text"
+  color: "white"
 inputs:
   cluster:
     description: Cluster name
@@ -31,7 +31,7 @@ inputs:
   gitref-sha:
     description: Git SHA
     required: false
-    default: ''
+    default: ""
   namespace:
     description: Kubernetes namespace
     required: true
@@ -43,7 +43,7 @@ inputs:
     required: true
   debug:
     description: Debug mode
-    default: 'false'
+    default: "false"
     required: false
   release_label_name:
     description: The name of the label used to describe the helm release
@@ -52,20 +52,20 @@ inputs:
   values:
     description: Extra values to pass to the helm action (comma-separated NAME=VAL pairs)
     required: false
-  values_file:
-    description: Contents of a values file to use in the deployment
+  values_yaml:
+    description: YAML string with extra values to use in a helmfile deploy
     required: false
 outputs:
   webapp-url:
     description: "Web Application url"
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: "docker"
+  image: "Dockerfile"
   env:
     AWS_REGION: ${{ inputs.aws-region }}
     ENVIRONMENT: ${{ inputs.environment }}
     HELM_VALUES: ${{ inputs.values }}
-    HELM_VALUES_FILE_CONTENTS: ${{ inputs.values_file }}
+    HELM_VALUES_YAML: ${{ inputs.values_yaml }}
     HELMFILE: ${{ inputs.helmfile }}
     HELMFILE_PATH: ${{ inputs.helmfile-path }}
     NAMESPACE: ${{ inputs.namespace }}
