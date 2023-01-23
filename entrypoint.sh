@@ -36,7 +36,7 @@ fi
 if [[ "${OPERATION}" == "deploy" ]]; then
 	echo "Deploying..."
 
-	OPERATION_COMMAND="helmfile ${HELM_VALUES_FLAG} ${HELM_VALUES_FILE_FLAG} --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml $DEBUG_ARGS apply"
+	OPERATION_COMMAND="helmfile ${HELM_VALUES_FLAG} --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml $DEBUG_ARGS apply"
 	echo "Executing: ${OPERATION_COMMAND}"
 	${OPERATION_COMMAND}
 
