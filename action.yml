@@ -28,6 +28,10 @@ inputs:
     description: Helmfile environment
     required: false
     default: preview
+  subenvironment:
+    description: Helmfile subenvironment
+    required: false
+    default: ''
   gitref-sha:
     description: Git SHA
     required: false
@@ -58,6 +62,7 @@ runs:
   env:
     AWS_REGION: ${{ inputs.aws-region }}
     ENVIRONMENT: ${{ inputs.environment }}
+    SUBENVIRONMENT: ${{ inputs.subenvironment }}
     HELMFILE: ${{ inputs.helmfile }}
     HELMFILE_PATH: ${{ inputs.helmfile-path }}
     NAMESPACE: ${{ inputs.namespace }}
