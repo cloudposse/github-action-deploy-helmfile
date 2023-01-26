@@ -5,7 +5,7 @@ set -e
 export APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
 
 source /etc/profile.d/aws.sh
- 
+
 # Used for debugging
 aws sts --region ${AWS_REGION} get-caller-identity
 
@@ -22,8 +22,13 @@ if [[ "${HELM_DEBUG}" == "true" ]]; then
 	DEBUG_ARGS=" --debug"
 fi
 
-if [[ "${OPERATION}" == "deploy" ]]; then
+if [[ -n "$HELM_VALUES_YAML" ]]; then
+  echo -e "Using extra values:\n${HELM_VALUES_YAML}"
+  export HELM_VALUES_FILE="/tmp/extra_helm_values.yml"
+  echo "$HELM_VALUES_YAML" > "$HELM_VALUES_FILE"
+fi
 
+if [[ "${OPERATION}" == "deploy" ]]; then
 	OPERATION_COMMAND="helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml $DEBUG_ARGS apply"
 	echo "Executing: ${OPERATION_COMMAND}"
 	${OPERATION_COMMAND}
@@ -55,7 +60,5 @@ elif [[ "${OPERATION}" == "destroy" ]]; then
     if [[ "${RELEASES_COUNTS}" == "0" ]]; then
     	kubectl delete ns ${NAMESPACE}
     fi
-	fi
+  fi
 fi
-
-
