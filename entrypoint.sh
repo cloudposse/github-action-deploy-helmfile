@@ -12,14 +12,6 @@ aws sts --region ${AWS_REGION} get-caller-identity
 # Login to Kubernetes Cluster.
 aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME}
 
-cat $KUBECONFIG
-
-kubectl config get-contexts
-
-kubectl config view --minify
-
-kubectl get ns
-
 # Read platform specific configs/info
 chamber export platform/${CLUSTER_NAME}/${ENVIRONMENT} --format yaml | yq --exit-status --no-colors  eval '{"platform": .}' - > /tmp/platform.yaml
 
@@ -44,7 +36,7 @@ if [[ "${OPERATION}" == "deploy" ]]; then
 	RELEASES=$(helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml list --output json | jq .[].name -r)
 	for RELEASE in ${RELEASES}
   do
-	ENTRYPOINT=$(kubectl --namespace ${NAMESPACE} get -l ${RELEASE_LABEL_NAME}=${RELEASE} ingress --output=jsonpath='{.items[*].metadata.annotations.outputs\.webapp-url}')
+	ENTRYPOINT=$(kubectl --namespace ${NAMESPACE} get -l ${RELEASE_LABEL_NAME}=${RELEASE} ingress --output=jsonpath='{.items[*].metadata.annotations.outputs\.platform\.cloudposse\.com/webapp-url}')
 		if [[ "${ENTRYPOINT}" != "" ]]; then
 			echo "::set-output name=webapp-url::${ENTRYPOINT}"
   	fi
