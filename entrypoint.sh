@@ -12,6 +12,10 @@ aws sts --region ${AWS_REGION} get-caller-identity
 # Login to Kubernetes Cluster.
 aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME}
 
+cat $KUBECONFIG
+
+kubectl get ns
+
 # Read platform specific configs/info
 chamber export platform/${CLUSTER_NAME}/${ENVIRONMENT} --format yaml | yq --exit-status --no-colors  eval '{"platform": .}' - > /tmp/platform.yaml
 
