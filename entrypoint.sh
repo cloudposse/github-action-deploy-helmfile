@@ -14,6 +14,10 @@ aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME}
 
 cat $KUBECONFIG
 
+kubectl config get-contexts
+
+kubectl config view --minify
+
 kubectl get ns
 
 # Read platform specific configs/info
