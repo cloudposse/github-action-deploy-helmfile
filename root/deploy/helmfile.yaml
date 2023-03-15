@@ -4,6 +4,7 @@ environments:
   staging:
   production:
   dev:
+  qa:
   qa1:
   qa2:
   qa3:
@@ -14,3 +15,6 @@ helmfiles:
   - path: {{ requiredEnv "APPLICATION_HELMFILE" }}
     values:
       - /tmp/platform.yaml
+      {{- if env "HELM_VALUES_FILE" }}
+      - {{ env "HELM_VALUES_FILE" }}
+      {{- end }}

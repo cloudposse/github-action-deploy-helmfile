@@ -15,6 +15,8 @@ helm3 plugin install https://github.com/databus23/helm-diff.git --version v${HEL
 
 export APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
 
+source /etc/profile.d/aws.sh
+
 # Used for debugging
 aws sts --region ${AWS_REGION} get-caller-identity || echo "AWS is not authorized"
 
@@ -36,8 +38,13 @@ if [[ "${HELM_DEBUG}" == "true" ]]; then
 	DEBUG_ARGS=" --debug"
 fi
 
-if [[ "${OPERATION}" == "deploy" ]]; then
+if [[ -n "$HELM_VALUES_YAML" ]]; then
+  echo -e "Using extra values:\n${HELM_VALUES_YAML}"
+  export HELM_VALUES_FILE="/tmp/extra_helm_values.yml"
+  echo "$HELM_VALUES_YAML" > "$HELM_VALUES_FILE"
+fi
 
+if [[ "${OPERATION}" == "deploy" ]]; then
 	OPERATION_COMMAND="helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml $DEBUG_ARGS apply"
 	echo "Executing: ${OPERATION_COMMAND}"
 	${OPERATION_COMMAND}
@@ -45,12 +52,11 @@ if [[ "${OPERATION}" == "deploy" ]]; then
 	RELEASES=$(helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml list --output json | jq .[].name -r)
 	for RELEASE in ${RELEASES}
   do
-  	ENTRYPOINT=$(kubectl --namespace ${NAMESPACE} get -l release=${RELEASE} ingress --output=jsonpath='{.items[*].metadata.annotations.outputs\.platform\.cloudposse\.com/webapp-url}')
-  	if [[ "${ENTRYPOINT}" != "" ]]; then
-  		echo "::set-output name=webapp-url::${ENTRYPOINT}"
+	ENTRYPOINT=$(kubectl --namespace ${NAMESPACE} get -l ${RELEASE_LABEL_NAME}=${RELEASE} ingress --output=jsonpath='{.items[*].metadata.annotations.outputs\.webapp-url}')
+		if [[ "${ENTRYPOINT}" != "" ]]; then
+			echo "::set-output name=webapp-url::${ENTRYPOINT}"
   	fi
   done
-
 
 
 elif [[ "${OPERATION}" == "destroy" ]]; then
@@ -70,7 +76,5 @@ elif [[ "${OPERATION}" == "destroy" ]]; then
     if [[ "${RELEASES_COUNTS}" == "0" ]]; then
     	kubectl delete ns ${NAMESPACE}
     fi
-	fi
+  fi
 fi
-
-

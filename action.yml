@@ -28,6 +28,10 @@ inputs:
     description: Helmfile environment
     required: false
     default: preview
+  gitref-sha:
+    description: Git SHA
+    required: false
+    default: ''
   namespace:
     description: Kubernetes namespace
     required: true
@@ -41,6 +45,13 @@ inputs:
     description: Debug mode
     default: 'false'
     required: false
+  release_label_name:
+    description: The name of the label used to describe the helm release
+    default: "release"
+    required: false
+  values_yaml:
+    description: YAML string with extra values to use in a helmfile deploy
+    required: false
 outputs:
   webapp-url:
     description: "Web Application url"
@@ -50,11 +61,14 @@ runs:
   env:
     AWS_REGION: ${{ inputs.aws-region }}
     ENVIRONMENT: ${{ inputs.environment }}
+    HELM_VALUES_YAML: ${{ inputs.values_yaml }}
     HELMFILE: ${{ inputs.helmfile }}
     HELMFILE_PATH: ${{ inputs.helmfile-path }}
     NAMESPACE: ${{ inputs.namespace }}
     IMAGE_NAME: ${{ inputs.image }}
     IMAGE_TAG: ${{ inputs.image-tag }}
     OPERATION: ${{ inputs.operation }}
+    GITREF_SHA: ${{ inputs.gitref-sha }}
     CLUSTER_NAME: ${{ inputs.cluster }}
     HELM_DEBUG: ${{ inputs.debug }}
+    RELEASE_LABEL_NAME: ${{ inputs.release_label_name }}
