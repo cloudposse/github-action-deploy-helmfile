@@ -49,6 +49,9 @@ inputs:
     description: The name of the label used to describe the helm release
     default: "release"
     required: false
+  values_yaml:
+    description: YAML string with extra values to use in a helmfile deploy
+    required: false
 outputs:
   webapp-url:
     description: "Web Application url"
@@ -58,6 +61,7 @@ runs:
   env:
     AWS_REGION: ${{ inputs.aws-region }}
     ENVIRONMENT: ${{ inputs.environment }}
+    HELM_VALUES_YAML: ${{ inputs.values_yaml }}
     HELMFILE: ${{ inputs.helmfile }}
     HELMFILE_PATH: ${{ inputs.helmfile-path }}
     NAMESPACE: ${{ inputs.namespace }}
