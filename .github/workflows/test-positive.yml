@@ -80,10 +80,11 @@ jobs:
           AWS_ENDPOINT_OVERRIDE: http://localhost:4566
 
       - run: |
-          echo "${{ steps.localstack-context.outputs.token }}"
+          # echo "${{ steps.localstack-context.outputs.token }}"
           kubectl create serviceaccount cluster-admin
           kubectl create clusterrolebinding cluster-admin-manual --clusterrole=cluster-admin --serviceaccount=default:cluster-admin
           kubectl get serviceaccount cluster-admin -o json
+          kubectl get secrets
           kubectl get nodes
           cat $KUBECONFIG
 
