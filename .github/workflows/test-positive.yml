@@ -34,6 +34,38 @@ jobs:
           version: 'latest'
 
       - run: |
+          aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} ssm put-parameter \
+            --name "/platform/default/staging/default_ingress_domain" \
+            --type "SecureString" \
+            --value "example.com"
+          
+          aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} ssm put-parameter \
+            --name "/platform/default/staging/default_alb_ingress_group" \
+            --type "SecureString" \
+            --value "default" \
+            --debug
+
+          aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} ssm put-parameter \
+            --name "/platform/default/_metadata/kube_version" \
+            --type "SecureString" \
+            --value "1.15" \
+            --debug
+          
+          aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} s3api create-bucket \
+            --bucket clusters \
+            --debug
+          
+          aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} eks get-token \
+            --cluster-name test
+          
+        env:
+          AWS_ACCESS_KEY_ID: test
+          AWS_SECRET_ACCESS_KEY: test
+          AWS_DEFAULT_REGION: us-east-1
+          ## Use localhost to connect localstack because the commands runs not in a container
+          AWS_ENDPOINT_OVERRIDE: http://localhost:4566
+
+      - run: |
           kubectl get nodes
           cat $KUBECONFIG
 
