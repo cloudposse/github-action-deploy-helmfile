@@ -36,7 +36,7 @@ jobs:
       - uses: debianmaster/actions-k3s@master
         id: k3s
         with:
-          version: 'latest'
+          version: 'v1.26.2+k3s1'
 
       - name: 'Install jq 1.6'
         uses: dcarbone/install-jq-action@v1.0.1
