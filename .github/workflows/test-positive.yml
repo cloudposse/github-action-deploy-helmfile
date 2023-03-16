@@ -60,10 +60,18 @@ jobs:
           aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} s3api create-bucket \
             --bucket clusters \
             --debug
-          
-          aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} eks get-token \
-            --cluster-name test | jq .status.token
+        env:
+          AWS_ACCESS_KEY_ID: test
+          AWS_SECRET_ACCESS_KEY: test
+          AWS_DEFAULT_REGION: us-east-1
+          ## Use localhost to connect localstack because the commands runs not in a container
+          AWS_ENDPOINT_OVERRIDE: http://localhost:4566
 
+      - id: localstack-context
+        run: |
+          TOKEN=$(aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} eks get-token \
+            --cluster-name test | jq -r .status.token)
+          echo "token=${TOKEN}" >> $GITHUB_OUTPUTS
         env:
           AWS_ACCESS_KEY_ID: test
           AWS_SECRET_ACCESS_KEY: test
@@ -72,6 +80,7 @@ jobs:
           AWS_ENDPOINT_OVERRIDE: http://localhost:4566
 
       - run: |
+          echo "${{ steps.localstack-context.outputs.token }}"
           kubectl get nodes
           cat $KUBECONFIG
 
