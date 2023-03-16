@@ -35,6 +35,8 @@ jobs:
 
       - run: |
           kubectl get nodes
+          cat $KUBECONFIG
+
 
       - name: Checkout
         uses: actions/checkout@v3
