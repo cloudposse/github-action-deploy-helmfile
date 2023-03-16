@@ -36,7 +36,7 @@ jobs:
       - uses: debianmaster/actions-k3s@master
         id: k3s
         with:
-          version: 'v1.26.2-k3s1'
+          version: 'v1.21.2-k3s1'
 
       - name: 'Install jq 1.6'
         uses: dcarbone/install-jq-action@v1.0.1
@@ -85,10 +85,14 @@ jobs:
           AWS_ENDPOINT_OVERRIDE: http://localhost:4566
 
       - run: |
+          echo "${{ steps.localstack-context.outputs.token }}"
           kubectl create serviceaccount cluster-admin
           kubectl create clusterrolebinding cluster-admin-manual --clusterrole=cluster-admin --serviceaccount=default:cluster-admin
           kubectl get serviceaccount cluster-admin -o yaml
           kubectl get secrets -o yaml
+          export TOKENNAME=$(kubectl -n kube-system get serviceaccount/cluster-admin -o jsonpath='{.secrets[0].name}')
+          export TOKEN=$(kubectl -n kube-system get secret $TOKENNAME -o jsonpath='{.data.token}' | base64 --decode)
+          echo "${TOKEN}"          
           kubectl get nodes
           cat $KUBECONFIG
 
