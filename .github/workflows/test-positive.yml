@@ -28,15 +28,11 @@ jobs:
           - 4566:4566
           - 4510-4559:4510-4559
     steps:
-#      - uses: debianmaster/actions-k3s@master
-#        id: k3s
-#        with:
-#          version: 'latest'
-
       - uses: nolar/setup-k3d-k3s@v1
         with:
           version: v1.21
           k3d-args: --servers 2
+
       - name: 'Install jq 1.6'
         uses: dcarbone/install-jq-action@v1.0.1
         with:
@@ -84,11 +80,10 @@ jobs:
           AWS_ENDPOINT_OVERRIDE: http://localhost:4566
 
       - run: |
-          # echo "${{ steps.localstack-context.outputs.token }}"
           kubectl create serviceaccount cluster-admin
           kubectl create clusterrolebinding cluster-admin-manual --clusterrole=cluster-admin --serviceaccount=default:cluster-admin
-          kubectl get serviceaccount cluster-admin
-          kubectl get secrets
+          kubectl get serviceaccount cluster-admin -o yaml
+          kubectl get secrets -o yaml
           kubectl get nodes
           cat $KUBECONFIG
 
