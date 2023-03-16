@@ -33,6 +33,12 @@ jobs:
         with:
           version: 'latest'
 
+      - name: 'Install jq 1.6'
+        uses: dcarbone/install-jq-action@v1.0.1
+        with:
+          version: 1.6
+          force: 'true'
+
       - run: |
           aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} ssm put-parameter \
             --name "/platform/default/staging/default_ingress_domain" \
@@ -56,8 +62,8 @@ jobs:
             --debug
           
           aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} eks get-token \
-            --cluster-name test
-          
+            --cluster-name test | jq .status.token
+
         env:
           AWS_ACCESS_KEY_ID: test
           AWS_SECRET_ACCESS_KEY: test
