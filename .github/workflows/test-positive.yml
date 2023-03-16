@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: nolar/setup-k3d-k3s@v1
         with:
-          version: v1.26
+          version: v1.26.2
           k3d-args: --servers 2
 
       - name: 'Install jq 1.6'
