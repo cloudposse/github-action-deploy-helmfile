@@ -71,7 +71,7 @@ jobs:
         run: |
           TOKEN=$(aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} eks get-token \
             --cluster-name test | jq -r .status.token)
-          echo "token=${TOKEN}" >> $GITHUB_OUTPUTS
+          echo "token=${TOKEN}" >> $GITHUB_OUTPUT
         env:
           AWS_ACCESS_KEY_ID: test
           AWS_SECRET_ACCESS_KEY: test
