@@ -34,7 +34,7 @@ jobs:
           version: 'latest'
 
       - run: |
-        kubectl get nodes
+          kubectl get nodes
 
       - name: Checkout
         uses: actions/checkout@v3
