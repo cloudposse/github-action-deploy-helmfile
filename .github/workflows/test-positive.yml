@@ -74,6 +74,10 @@ jobs:
 
       - id: localstack-context
         run: |
+          aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} eks get-token \
+            --cluster-name test \
+            --debug
+          
           TOKEN=$(aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} eks get-token \
             --cluster-name test | jq -r .status.token)
           echo "token=${TOKEN}" >> $GITHUB_OUTPUT
