@@ -69,12 +69,12 @@ jobs:
         with:
           config: |-
             aws: |-
-              if [[ "$1" == "eks" ]]; then
-                echo "Skip EKS related commands";
+              if [[ \"$1\" == \"eks\" ]]; then
+                echo \"Skip EKS related commands\";
                 exit 0;
               fi;
             
-              /usr/bin/aws "$@"
+              /usr/bin/aws $@
 
       - id: mock
         run: |
