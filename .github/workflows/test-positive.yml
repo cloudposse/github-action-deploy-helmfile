@@ -101,7 +101,7 @@ jobs:
           helmfile-path: ./test
           aws-region: us-east-1
           cluster: preview-eks
-          environment: preview
+          environment: default
           namespace: preview
           image: nginx
           image-tag: latest
