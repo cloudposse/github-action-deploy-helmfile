@@ -11,7 +11,7 @@ then
 	export PATH=${PATH_OVERRIDE}
 fi;
 
-echo "${PATH}"
+ls -l /github/workspace/bin/
 
 whereis aws
 
