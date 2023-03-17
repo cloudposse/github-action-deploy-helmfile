@@ -71,8 +71,8 @@ jobs:
         id: aws_mock
         uses: cloudposse/github-action-yaml-config-query@0.1.2
         with:
-          config: |
-            aws: |
+          config: |-
+            aws: |-
               #!/bin/bash -l
               
               set -e
@@ -81,13 +81,13 @@ jobs:
       - id: mock
         run: |
           mkdir -p ./bin/
-          echo "${{ steps.aws_mock.outputs.aws }}" > ./bin/aws
-          chmod +x ./bin/aws
-          cat ./bin/aws
+          echo "${{ steps.aws_mock.outputs.aws }}" > ./bin/mock.sh
+          chmod +x ./bin/mock.sh
+          cat ./bin/mock.sh
           echo "path=$(pwd)/bin/:${PATH}" >> $GITHUB_OUTPUT
 
       - run: |
-          aws help
+          mock.sh
         env:
           PATH: ${{ steps.mock.outputs.path }}
 
