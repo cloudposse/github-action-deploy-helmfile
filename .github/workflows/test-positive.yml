@@ -69,7 +69,7 @@ jobs:
         with:
           config: |-
             aws: |-
-              #!/bin/bash -l
+              #!/bin/bash
               
               set -e
             
