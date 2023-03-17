@@ -97,7 +97,7 @@ jobs:
           echo "${{ steps.aws_mock.outputs.aws }}" > ./bin/aws
           chmod +x ./bin/aws
           cat ./bin/aws
-          echo "path=/github/workspace/bin/:${PATH}" >> $GITHUB_OUTPUT
+          echo "path=$(pwd)/bin/:${PATH}" >> $GITHUB_OUTPUT
 
       - name: Checkout
         uses: actions/checkout@v3
