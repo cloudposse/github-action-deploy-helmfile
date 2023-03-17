@@ -100,9 +100,9 @@ jobs:
         with:
           helmfile-path: ./test
           aws-region: us-east-1
-          cluster: preview-eks
-          environment: default
-          namespace: preview
+          cluster: default
+          environment: staging
+          namespace: staging
           image: nginx
           image-tag: latest
           operation: deploy
