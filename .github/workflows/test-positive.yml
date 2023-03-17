@@ -81,16 +81,15 @@ jobs:
       - id: mock
         run: |
           mkdir -p ./bin/
-          echo "${{ steps.aws_mock.outputs.aws }}" > ./bin/mock.sh
-          chmod +x ./bin/mock.sh
-          cat ./bin/mock.sh
+          echo "${{ steps.aws_mock.outputs.aws }}" > ./bin/aws
+          chmod +x ./bin/aws
+          cat ./bin/aws
           echo "path=$(pwd)/bin/:${PATH}" >> $GITHUB_OUTPUT
-          echo "$(pwd)/bin/" >> $GITHUB_PATH
-          cat ${GITHUB_PATH}
 
       - run: |
-          echo "${PATH}"
-          mock.sh
+          aws
+        env:
+          PATH: ${{ steps.mock.outputs.path }}
 
       - name: Checkout
         uses: actions/checkout@v3
