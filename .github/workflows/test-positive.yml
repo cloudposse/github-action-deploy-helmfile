@@ -74,8 +74,6 @@ jobs:
                 exit 0;
               fi;
               
-              shift;
-              
               echo \"$@\"
               
               /usr/bin/aws \"$@\"
