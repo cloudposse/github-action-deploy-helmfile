@@ -93,11 +93,11 @@ jobs:
 
       - id: mock
         run: |
-          mkdir -p ${RUNNER_TEMP}/bin/
-          echo "${{ steps.aws_mock.outputs.aws }}" > ${RUNNER_TEMP}/bin/aws
-          chmod +x ${RUNNER_TEMP}/bin/aws
-          cat ${RUNNER_TEMP}/bin/aws
-          echo "path=/github/workspace/bin/:${RUNNER_TEMP}/bin/:${PATH}" >> $GITHUB_OUTPUT
+          mkdir -p ${RUNNER_TEMP}/_github_home/bin/
+          echo "${{ steps.aws_mock.outputs.aws }}" > ${RUNNER_TEMP}/_github_home/bin/aws
+          chmod +x ${RUNNER_TEMP}/_github_home/bin/aws
+          cat ${RUNNER_TEMP}/_github_home/bin/aws
+          echo "path=/github/home/bin/:${RUNNER_TEMP}/bin/:${PATH}" >> $GITHUB_OUTPUT
 
       - name: Checkout
         uses: actions/checkout@v3
