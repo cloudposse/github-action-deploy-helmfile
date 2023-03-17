@@ -78,6 +78,8 @@ jobs:
               set -e
             
               echo "$1"
+            
+              echo "$2"
               
               if [ "$1" == "eks" ]; then
                 echo "Skip EKS related commands"
