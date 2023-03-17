@@ -76,6 +76,8 @@ jobs:
               
               shift;
               
+              echo \"$@\"
+              
               /usr/bin/aws \"$@\"
 
       - id: mock
