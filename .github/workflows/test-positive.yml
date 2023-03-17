@@ -77,7 +77,7 @@ jobs:
               
               set -e
               
-              if [ $1 = "eks" ]; then
+              if [ "$1" == "eks" ]; then
                 echo "Skip EKS related commands"
                 exit 0
               fi
