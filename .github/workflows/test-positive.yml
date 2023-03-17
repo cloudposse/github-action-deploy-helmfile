@@ -63,29 +63,35 @@ jobs:
           ## Use localhost to connect localstack because the commands runs not in a container
           AWS_ENDPOINT_OVERRIDE: http://localhost:4566
 
+      - run: |
+          mkdir -p ${RUNNER_TEMP}/_github_home/bin/
+          echo "${{ steps.aws_mock.outputs.aws }}" > ${RUNNER_TEMP}/_github_home/bin/aws
+          chmod +x ${RUNNER_TEMP}/_github_home/bin/aws
+          cat ${RUNNER_TEMP}/_github_home/bin/aws
+          echo "path=/github/home/bin/:${RUNNER_TEMP}/bin/:${PATH}" >> $GITHUB_OUTPUT
+
+
       - name: Mock AWS command
-        id: aws_mock
-        uses: cloudposse/github-action-yaml-config-query@0.1.2
+        uses: 1arp/create-a-file-action@0.2
         with:
-          config: |-
-            aws: |-
-              #!/bin/bash
-              
-              if [[ \"$1\" == \"eks\" ]]; then
-                echo \"Skip EKS related commands\";
-                exit 0;
-              fi;
-              
-              echo "args"
-              
-              echo \"$@\"
-              
-              /usr/bin/aws \"$@\"
+          path: ${RUNNER_TEMP}/_github_home/bin
+          file: aws
+          content: |
+            #!/bin/bash
+            
+            if [[ "$1" == "eks" ]]; then
+              echo "Skip EKS related commands";
+              exit 0;
+            fi;
+            
+            echo "args"
+            
+            echo "$@"
+            
+            /usr/bin/aws "$@"
 
       - id: mock
         run: |
-          mkdir -p ${RUNNER_TEMP}/_github_home/bin/
-          echo "${{ steps.aws_mock.outputs.aws }}" > ${RUNNER_TEMP}/_github_home/bin/aws
           chmod +x ${RUNNER_TEMP}/_github_home/bin/aws
           cat ${RUNNER_TEMP}/_github_home/bin/aws
           echo "path=/github/home/bin/:${RUNNER_TEMP}/bin/:${PATH}" >> $GITHUB_OUTPUT
