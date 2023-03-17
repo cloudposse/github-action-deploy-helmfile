@@ -76,6 +76,13 @@ jobs:
               #!/bin/bash -l
               
               set -e
+              
+              if [[ "$1" == "eks" ]];
+              then
+                echo "Skip EKS related commands"
+                exit 0
+              fi
+            
               ${{ steps.original_path.outputs.aws }} "$@"
 
       - id: mock
@@ -85,11 +92,6 @@ jobs:
           chmod +x ./bin/aws
           cat ./bin/aws
           echo "path=$(pwd)/bin/:${PATH}" >> $GITHUB_OUTPUT
-
-      - run: |
-          aws
-        env:
-          PATH: ${{ steps.mock.outputs.path }}
 
       - name: Checkout
         uses: actions/checkout@v3
