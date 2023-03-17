@@ -73,10 +73,17 @@ jobs:
               
               set -e
             
-              echo "$1"
-            
-              echo "$2"
+              args=("$@")
+              # get number of elements 
+              ELEMENTS=${#args[@]}
               
+              # echo each element in array  
+              # for loop 
+              for (( i=0;i<$ELEMENTS;i++)); do
+                echo ${i}
+                echo ${args[${i}]}
+              done
+                          
               if [[ "$1" == "eks" ]]; then
                 echo "Skip EKS related commands";
                 exit 0;
