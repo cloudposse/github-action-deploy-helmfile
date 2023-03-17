@@ -28,6 +28,9 @@ jobs:
           - 4566:4566
           - 4510-4559:4510-4559
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - uses: debianmaster/actions-k3s@master
         id: k3s
         with:
@@ -91,9 +94,6 @@ jobs:
           chmod +x ${RUNNER_TEMP}/_github_home/bin/aws
           cat ${RUNNER_TEMP}/_github_home/bin/aws
           echo "path=/github/home/bin/:${RUNNER_TEMP}/bin/:${PATH}" >> $GITHUB_OUTPUT
-
-      - name: Checkout
-        uses: actions/checkout@v3
 
       - uses: ./
         id: current
