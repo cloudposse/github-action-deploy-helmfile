@@ -89,6 +89,7 @@ jobs:
           cat ${GITHUB_PATH}
 
       - run: |
+          echo "${PATH}"
           mock.sh
 
       - name: Checkout
