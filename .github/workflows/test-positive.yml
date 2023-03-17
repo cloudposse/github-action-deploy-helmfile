@@ -69,15 +69,6 @@ jobs:
         with:
           config: |-
             aws: |-
-              #!/bin/bash
-              
-              set -e
-            
-              while (( "$#" )); do
-                echo $1
-                shift
-              done
-                          
               if [[ "$1" == "eks" ]]; then
                 echo "Skip EKS related commands";
                 exit 0;
