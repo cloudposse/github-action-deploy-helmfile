@@ -37,6 +37,7 @@ jobs:
           version: 'v1.23.2-k3s1'
 
       - run: |
+          mkdir -p ${RUNNER_TEMP}/_github_home
           cp ${{ steps.k3s.outputs.kubeconfig }} ${RUNNER_TEMP}/_github_home/kubeconfig
           echo "KUBECONFIG=/github/home/kubeconfig" >> $GITHUB_ENV
 
