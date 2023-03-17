@@ -11,20 +11,16 @@ then
 	export PATH=${PATH_OVERRIDE}
 fi;
 
-echo "sts"
-
-cat /github/home/bin/aws
-
 # Used for debugging
 aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} sts --region ${AWS_REGION} get-caller-identity
-
-echo "eks"
 
 # Login to Kubernetes Cluster.
 aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME}
 
 # Read platform specific configs/info
 chamber export platform/${CLUSTER_NAME}/${ENVIRONMENT} --format yaml | yq --exit-status --no-colors  eval '{"platform": .}' - > /tmp/platform.yaml
+
+cat /tmp/platform.yaml
 
 DEBUG_ARGS=""
 
