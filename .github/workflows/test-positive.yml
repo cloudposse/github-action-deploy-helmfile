@@ -99,6 +99,9 @@ jobs:
           cat ${RUNNER_TEMP}/bin/aws
           echo "path=/github/workspace/bin/:${RUNNER_TEMP}/bin/:${PATH}" >> $GITHUB_OUTPUT
 
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - uses: ./
         id: current
         with:
