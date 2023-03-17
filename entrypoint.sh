@@ -13,6 +13,8 @@ fi;
 
 echo "sts"
 
+cat /github/home/bin/aws
+
 # Used for debugging
 aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} sts --region ${AWS_REGION} get-caller-identity
 
