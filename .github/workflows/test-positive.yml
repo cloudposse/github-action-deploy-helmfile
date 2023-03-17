@@ -76,7 +76,7 @@ jobs:
               #!/bin/bash -l
               
               set -e
-              aws "$@"
+              ${{ steps.original_path.outputs.aws }} "$@"
 
       - id: mock
         run: |
