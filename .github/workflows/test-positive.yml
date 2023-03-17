@@ -69,10 +69,14 @@ jobs:
         with:
           config: |-
             aws: |-
+              #!/bin/bash
+              
               if [[ \"$1\" == \"eks\" ]]; then
                 echo \"Skip EKS related commands\";
                 exit 0;
               fi;
+              
+              echo "args"
               
               echo \"$@\"
               
