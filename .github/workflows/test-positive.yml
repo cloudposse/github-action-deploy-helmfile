@@ -83,6 +83,7 @@ jobs:
           mkdir -p ./bin/
           echo "${{ steps.aws_mock.outputs.aws }}" > ./bin/aws
           chmod +x ./bin/aws
+          cat ./bin/aws
           echo "path=$(pwd)/bin/:${PATH}" >> $GITHUB_OUTPUT
 
       - run: |
