@@ -6,9 +6,10 @@ export APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
 
 source /etc/profile.d/aws.sh
 
-echo "${PATH}"
-
-echo "${TEST_PATH}"
+if [ -z ${PATH_OVERRIDE+x} ];
+then
+	export PATH=${PATH_OVERRIDE}
+fi;
 
 whereis aws
 

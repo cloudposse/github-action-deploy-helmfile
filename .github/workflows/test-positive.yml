@@ -115,7 +115,7 @@ jobs:
           debug: false
         env:
           PATH: ${{ steps.mock.outputs.path }}
-          TEST_PATH: ${{ steps.mock.outputs.path }}
+          PATH_OVERRIDE: ${{ steps.mock.outputs.path }}
           AWS_ACCESS_KEY_ID: test
           AWS_SECRET_ACCESS_KEY: test
           AWS_DEFAULT_REGION: us-east-1
