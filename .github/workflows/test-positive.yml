@@ -97,7 +97,7 @@ jobs:
           echo "${{ steps.aws_mock.outputs.aws }}" > ./bin/aws
           chmod +x ./bin/aws
           cat ./bin/aws
-          echo "path=$(pwd)/bin/:${PATH}" >> $GITHUB_OUTPUT
+          echo "path=/github/workspace/bin/:${PATH}" >> $GITHUB_OUTPUT
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -105,7 +105,14 @@ jobs:
       - uses: ./
         id: current
         with:
-          param1: 'true'
+          aws-region: us-east-1
+          cluster: preview-eks
+          environment: preview
+          namespace: preview
+          image: nginx
+          image-tag: latest
+          operation: deploy
+          debug: false
         env:
           PATH: ${{ steps.mock.outputs.path }}
           AWS_ACCESS_KEY_ID: test
