@@ -28,11 +28,6 @@ jobs:
           - 4566:4566
           - 4510-4559:4510-4559
     steps:
-#      - uses: nolar/setup-k3d-k3s@v1
-#        with:
-#          version: v1.26.2
-#          k3d-args: --servers 2
-
       - uses: debianmaster/actions-k3s@master
         id: k3s
         with:
@@ -61,10 +56,6 @@ jobs:
             --type "SecureString" \
             --value "1.15" \
             --debug
-          
-          aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} s3api create-bucket \
-            --bucket clusters \
-            --debug
         env:
           AWS_ACCESS_KEY_ID: test
           AWS_SECRET_ACCESS_KEY: test
@@ -72,34 +63,15 @@ jobs:
           ## Use localhost to connect localstack because the commands runs not in a container
           AWS_ENDPOINT_OVERRIDE: http://localhost:4566
 
-      - id: localstack-context
+      - id: mock
         run: |
-          aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} eks get-token \
-            --cluster-name test \
-            --debug
-          
-          TOKEN=$(aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} eks get-token \
-            --cluster-name test | jq -r .status.token)
-          echo "token=${TOKEN}" >> $GITHUB_OUTPUT
-        env:
-          AWS_ACCESS_KEY_ID: test
-          AWS_SECRET_ACCESS_KEY: test
-          AWS_DEFAULT_REGION: us-east-1
-          ## Use localhost to connect localstack because the commands runs not in a container
-          AWS_ENDPOINT_OVERRIDE: http://localhost:4566
+          mkdir -p ./bin/
+          echo "echo \"Mock\"" > ./bin/mock.sh
+          chmod +x ./bin/mock.sh
+          echo "path=$(pwd)/bin/" >> $GITHUB_OUTPUT
 
       - run: |
-          echo "${{ steps.localstack-context.outputs.token }}"
-          kubectl create serviceaccount cluster-admin
-          kubectl create clusterrolebinding cluster-admin-manual --clusterrole=cluster-admin --serviceaccount=default:cluster-admin
-          kubectl get serviceaccount cluster-admin -o yaml
-          kubectl get secrets -o yaml
-          export TOKENNAME=$(kubectl -n kube-system get serviceaccount/cluster-admin -o jsonpath='{.secrets[0].name}')
-          export TOKEN=$(kubectl -n kube-system get secret $TOKENNAME -o jsonpath='{.data.token}' | base64 --decode)
-          echo "${TOKEN}"          
-          kubectl get nodes
-          cat $KUBECONFIG
-
+          mock.sh
 
       - name: Checkout
         uses: actions/checkout@v3
