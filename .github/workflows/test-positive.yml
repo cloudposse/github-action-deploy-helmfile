@@ -63,15 +63,32 @@ jobs:
           ## Use localhost to connect localstack because the commands runs not in a container
           AWS_ENDPOINT_OVERRIDE: http://localhost:4566
 
+    - id: original_path
+      run: |
+        echo "aws=$(whereis aws | cut -d' ' -f2)" >> $GITHUB_OUTPUT
+
+    - name: Mock AWS command
+      id: aws_mock
+      uses: cloudposse/github-action-yaml-config-query@0.1.2
+      with:
+        aws: |
+          #!/bin/bash -l
+          
+          set -e
+          aws "$@"
+
+#      - run: |
+#        docker run ${{ steps.context.outputs.image }}:${{ steps.context.outputs.tag }}
+#
       - id: mock
         run: |
           mkdir -p ./bin/
-          echo "echo \"Mock\"" > ./bin/mock.sh
-          chmod +x ./bin/mock.sh
+          echo "${{ steps.aws_mock.outputs.aws }}" > ./bin/aws
+          chmod +x ./bin/aws
           echo "path=$(pwd)/bin/:${PATH}" >> $GITHUB_OUTPUT
 
       - run: |
-          mock.sh
+          aws help
         env:
           PATH: ${{ steps.mock.outputs.path }}
 
@@ -82,6 +99,8 @@ jobs:
         id: current
         with:
           param1: 'true'
+        env:
+          PATH: ${{ steps.mock.outputs.path }}
 
     outputs:
       result: "${{ steps.current.outputs.result1 }}"
