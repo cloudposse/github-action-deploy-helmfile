@@ -63,10 +63,6 @@ jobs:
           ## Use localhost to connect localstack because the commands runs not in a container
           AWS_ENDPOINT_OVERRIDE: http://localhost:4566
 
-      - id: original_path
-        run: |
-          echo "aws=$(whereis aws | cut -d' ' -f2)" >> $GITHUB_OUTPUT
-
       - name: Mock AWS command
         id: aws_mock
         uses: cloudposse/github-action-yaml-config-query@0.1.2
@@ -76,17 +72,8 @@ jobs:
               #!/bin/bash -l
               
               set -e
-            
-              echo "$1"
-            
-              echo "$2"
-              
-              if [ "$1" == "eks" ]; then
-                echo "Skip EKS related commands"
-                exit 0
-              fi
-            
-              ${{ steps.original_path.outputs.aws }} "$@"
+              echo "Skip aws related commands"
+              exit 0
 
       - id: mock
         run: |
