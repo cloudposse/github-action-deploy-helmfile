@@ -84,10 +84,6 @@ jobs:
               exit 0;
             fi;
             
-            echo "args"
-            
-            echo "$@"
-            
             /usr/bin/aws "$@"
 
       - id: mock
@@ -102,6 +98,7 @@ jobs:
       - uses: ./
         id: current
         with:
+          helmfile-path: ./test
           aws-region: us-east-1
           cluster: preview-eks
           environment: preview
