@@ -71,11 +71,12 @@ jobs:
         id: aws_mock
         uses: cloudposse/github-action-yaml-config-query@0.1.2
         with:
-          aws: |
-            #!/bin/bash -l
-            
-            set -e
-            aws "$@"
+          config: |
+            aws: |
+              #!/bin/bash -l
+              
+              set -e
+              aws "$@"
 
       - id: mock
         run: |
