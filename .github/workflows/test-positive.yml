@@ -68,10 +68,12 @@ jobs:
           mkdir -p ./bin/
           echo "echo \"Mock\"" > ./bin/mock.sh
           chmod +x ./bin/mock.sh
-          echo "path=$(pwd)/bin/" >> $GITHUB_OUTPUT
+          echo "path=$(pwd)/bin/:${PATH}" >> $GITHUB_OUTPUT
 
       - run: |
           mock.sh
+        env:
+          PATH: ${{ steps.mock.outputs.path }}
 
       - name: Checkout
         uses: actions/checkout@v3
