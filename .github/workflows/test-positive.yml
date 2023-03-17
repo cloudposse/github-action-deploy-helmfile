@@ -85,11 +85,11 @@ jobs:
           chmod +x ./bin/mock.sh
           cat ./bin/mock.sh
           echo "path=$(pwd)/bin/:${PATH}" >> $GITHUB_OUTPUT
+          echo "$(pwd)/bin/" >> $GITHUB_PATH
+          cat ${GITHUB_PATH}
 
       - run: |
           mock.sh
-        env:
-          PATH: ${{ steps.mock.outputs.path }}
 
       - name: Checkout
         uses: actions/checkout@v3
