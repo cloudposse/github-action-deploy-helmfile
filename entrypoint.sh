@@ -11,6 +11,8 @@ then
 	export PATH=${PATH_OVERRIDE}
 fi;
 
+echo "${PATH}"
+
 whereis aws
 
 # Used for debugging
