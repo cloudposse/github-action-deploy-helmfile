@@ -73,7 +73,9 @@ jobs:
                 echo \"Skip EKS related commands\";
                 exit 0;
               fi;
-            
+              
+              shift;
+              
               /usr/bin/aws \"$@\"
 
       - id: mock
