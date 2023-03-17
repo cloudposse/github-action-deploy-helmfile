@@ -82,6 +82,12 @@ jobs:
                 echo "Skip EKS related commands"
                 exit 0
               fi   
+
+              if [[ "$1" == "sts" ]];
+              then
+                echo "Skip STS related commands"
+                exit 0
+              fi   
             
               ${{ steps.original_path.outputs.aws }} "$@"
 
