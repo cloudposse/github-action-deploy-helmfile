@@ -8,6 +8,8 @@ source /etc/profile.d/aws.sh
 
 echo "${PATH}"
 
+echo "${TEST_PATH}"
+
 whereis aws
 
 # Used for debugging
