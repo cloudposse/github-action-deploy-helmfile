@@ -11,14 +11,12 @@ then
 	export PATH=${PATH_OVERRIDE}
 fi;
 
-echo "${PATH}"
-
-ls -l /github/workspace/
-
-whereis aws
+echo "sts"
 
 # Used for debugging
 aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} sts --region ${AWS_REGION} get-caller-identity
+
+echo "eks"
 
 # Login to Kubernetes Cluster.
 aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME}
