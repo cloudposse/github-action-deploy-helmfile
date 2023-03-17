@@ -6,6 +6,10 @@ export APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
 
 source /etc/profile.d/aws.sh
 
+echo "${PATH}"
+
+whereis aws
+
 # Used for debugging
 aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} sts --region ${AWS_REGION} get-caller-identity
 
