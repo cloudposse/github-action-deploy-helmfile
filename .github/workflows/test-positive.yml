@@ -46,7 +46,7 @@ jobs:
         id: k3s
         name: "Create Single Cluster"
         with:
-          cluster-name: "test-cluster-1"
+          cluster-name: "default"
           args: >-
             -p "8083:80@agent:0:direct"
             -p "8443:443@agent:0:direct"
@@ -61,6 +61,7 @@ jobs:
           mkdir -p ${RUNNER_TEMP}/_github_home
           cp ~/.kube/config ${RUNNER_TEMP}/_github_home/kubeconfig
           echo "KUBECONFIG=/github/home/kubeconfig" >> $GITHUB_ENV
+          cat ${RUNNER_TEMP}/_github_home/kubeconfig
 
       - name: 'Install jq 1.6'
         uses: dcarbone/install-jq-action@v1.0.1
