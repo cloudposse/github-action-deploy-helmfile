@@ -31,10 +31,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: debianmaster/actions-k3s@master
-        id: k3s
+#      - uses: debianmaster/actions-k3s@master
+#        id: k3s
+#        with:
+#          version: 'v1.23.2-k3s1'
+
+      - uses: AbsaOSS/k3d-action@v2
+        name: "Create Single Cluster"
         with:
-          version: 'v1.23.2-k3s1'
+          cluster-name: "test-cluster-1"
+          args: >-
+            -p "8083:80@agent:0:direct"
+            -p "8443:443@agent:0:direct"
+            -p "5053:53/udp@agent:0:direct"
+            --agents 2
+            --no-lb
+            --image docker.io/rancher/k3s:v1.23.2-k3s1
+#            --k3s-arg "--no-deploy=traefik,servicelb,metrics-server@server:*"
 
       - run: |
           docker network ls
