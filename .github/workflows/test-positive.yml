@@ -38,9 +38,9 @@ jobs:
 
       - id: docker-context
         run: |
-          NETWORK_NAME=$(docker network ls --filter='name=github_network_' --format "{{.Name}}")
+          docker network ls --filter='name=github_network_*'
+          NETWORK_NAME=$(docker network ls --filter='name=github_network_*' --format "{{.Name}}")
           echo "network=$(NETWORK_NAME)" >> $GITHUB_OUTPUT
-
 
       - uses: AbsaOSS/k3d-action@v2
         id: k3s
