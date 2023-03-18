@@ -36,7 +36,14 @@ jobs:
 #        with:
 #          version: 'v1.23.2-k3s1'
 
+      - id: docker-context
+        run: |
+          NETWORK_NAME=$(docker network ls --filter='name=github_network_' --format "{{.Name}}")
+          echo "network=$(NETWORK_NAME)" >> $GITHUB_OUTPUT
+
+
       - uses: AbsaOSS/k3d-action@v2
+        id: k3s
         name: "Create Single Cluster"
         with:
           cluster-name: "test-cluster-1"
@@ -44,13 +51,13 @@ jobs:
             -p "8083:80@agent:0:direct"
             -p "8443:443@agent:0:direct"
             -p "5053:53/udp@agent:0:direct"
-            --agents 2
+            --agents 1
             --no-lb
+            --network "${{ steps.docker-context.outputs.network }}"
             --image docker.io/rancher/k3s:v1.23.2-k3s1
 #            --k3s-arg "--no-deploy=traefik,servicelb,metrics-server@server:*"
 
       - run: |
-          docker network ls
           mkdir -p ${RUNNER_TEMP}/_github_home
           cp ${{ steps.k3s.outputs.kubeconfig }} ${RUNNER_TEMP}/_github_home/kubeconfig
           echo "KUBECONFIG=/github/home/kubeconfig" >> $GITHUB_ENV
