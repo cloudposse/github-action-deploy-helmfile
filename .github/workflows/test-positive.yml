@@ -61,7 +61,9 @@ jobs:
           docker ps
           kubectl get pods
           ls -la ./
-          echo ${KUBECONFIG}
+          ls -la ~/
+          ls -la ~/.kube
+          cat ~/.kube/config
 #          mkdir -p ${RUNNER_TEMP}/_github_home
 #          cp ${{ steps.k3s.outputs.kubeconfig }} ${RUNNER_TEMP}/_github_home/kubeconfig
 #          echo "KUBECONFIG=/github/home/kubeconfig" >> $GITHUB_ENV
