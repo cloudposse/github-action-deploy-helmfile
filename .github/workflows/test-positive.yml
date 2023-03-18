@@ -62,6 +62,7 @@ jobs:
           cp ~/.kube/config ${RUNNER_TEMP}/_github_home/kubeconfig
           echo "KUBECONFIG=/github/home/kubeconfig" >> $GITHUB_ENV
           cat ${RUNNER_TEMP}/_github_home/kubeconfig
+          docker ps -a
 
       - name: 'Install jq 1.6'
         uses: dcarbone/install-jq-action@v1.0.1
