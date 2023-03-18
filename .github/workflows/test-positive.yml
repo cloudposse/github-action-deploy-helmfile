@@ -58,15 +58,9 @@ jobs:
 #            --k3s-arg "--no-deploy=traefik,servicelb,metrics-server@server:*"
 
       - run: |
-          docker ps
-          kubectl get pods
-          ls -la ./
-          ls -la ~/
-          ls -la ~/.kube
-          cat ~/.kube/config
-#          mkdir -p ${RUNNER_TEMP}/_github_home
-#          cp ${{ steps.k3s.outputs.kubeconfig }} ${RUNNER_TEMP}/_github_home/kubeconfig
-#          echo "KUBECONFIG=/github/home/kubeconfig" >> $GITHUB_ENV
+          mkdir -p ${RUNNER_TEMP}/_github_home
+          cp ~/.kube/config ${RUNNER_TEMP}/_github_home/kubeconfig
+          echo "KUBECONFIG=/github/home/kubeconfig" >> $GITHUB_ENV
 
       - name: 'Install jq 1.6'
         uses: dcarbone/install-jq-action@v1.0.1
