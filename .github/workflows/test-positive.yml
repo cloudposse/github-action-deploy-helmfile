@@ -91,25 +91,10 @@ jobs:
           AWS_ENDPOINT_OVERRIDE: http://localhost:4566
 
       - name: Mock AWS command
-        uses: 1arp/create-a-file-action@0.2
-        with:
-          file: aws
-          content: |
-            #!/bin/bash
-            
-            exit 0;
-            
-            if [[ "$1" == "eks" ]]; then
-              echo "Skip EKS related commands";
-              exit 0;
-            fi;
-            
-            /usr/bin/aws "$@"
-
-      - id: mock
+        id: mock
         run: |
           mkdir -p ${RUNNER_TEMP}/_github_home/bin/
-          cp ./aws ${RUNNER_TEMP}/_github_home/bin/
+          echo "exit 0;" >> ${RUNNER_TEMP}/_github_home/bin/aws 
           chmod +x ${RUNNER_TEMP}/_github_home/bin/aws
           cat ${RUNNER_TEMP}/_github_home/bin/aws
           echo "path=/github/home/bin/:${RUNNER_TEMP}/bin/:${PATH}" >> $GITHUB_OUTPUT
