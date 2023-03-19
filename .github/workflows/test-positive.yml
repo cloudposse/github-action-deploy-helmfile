@@ -31,14 +31,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-#      - uses: debianmaster/actions-k3s@master
-#        id: k3s
-#        with:
-#          version: 'v1.23.2-k3s1'
-
       - id: docker-context
         run: |
-          docker network ls --filter='name=github_network_*'
           NETWORK_NAME=$(docker network ls --filter='name=github_network_*' --format "{{.Name}}")
           echo "network=${NETWORK_NAME}" >> $GITHUB_OUTPUT
 
@@ -63,15 +57,11 @@ jobs:
           cp ~/.kube/config ${RUNNER_TEMP}/_github_home/kubeconfig
           echo "KUBECONFIG=/github/home/kubeconfig" >> $GITHUB_ENV
           cat ${RUNNER_TEMP}/_github_home/kubeconfig
-          docker ps -a
 
       - name: Update k3s server url
         uses: mikefarah/yq@v4.32.1
         with:
           cmd: yq -i '.clusters[0].cluster.server = "https://k3d-default-server-0:6443"' '/github/home/kubeconfig'
-
-      - run: |
-          cat ${RUNNER_TEMP}/_github_home/kubeconfig
 
       - name: 'Install jq 1.6'
         uses: dcarbone/install-jq-action@v1.0.1

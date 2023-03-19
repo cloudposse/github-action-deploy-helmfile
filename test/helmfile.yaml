@@ -79,31 +79,6 @@ releases:
             "example-app.{{ .Values.platform.default_ingress_domain }}": /*
         {{- end }}
 
-      probes:
-        # Probe that ensures service is healthy
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: default
-            scheme: HTTP
-          periodSeconds: 3
-          initialDelaySeconds: 3
-          timeoutSeconds: 3
-          successThreshold: 1
-          failureThreshold: 2
-        
-        # Probe that ensures service has started
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: default
-            scheme: HTTP
-          periodSeconds: 3
-          initialDelaySeconds: 3
-          timeoutSeconds: 3
-          successThreshold: 1
-          failureThreshold: 2
-
       resources:
         requests:
           memory: 10Mi
