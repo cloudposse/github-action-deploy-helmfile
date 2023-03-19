@@ -90,13 +90,9 @@ jobs:
           ## Use localhost to connect localstack because the commands runs not in a container
           AWS_ENDPOINT_OVERRIDE: http://localhost:4566
 
-      - run: |
-          mkdir -p ${RUNNER_TEMP}/_github_home/bin/
-
       - name: Mock AWS command
         uses: 1arp/create-a-file-action@0.2
         with:
-          path: ${RUNNER_TEMP}/_github_home/bin/
           file: aws
           content: |
             #!/bin/bash
@@ -110,6 +106,8 @@ jobs:
 
       - id: mock
         run: |
+          mkdir -p ${RUNNER_TEMP}/_github_home/bin/
+          cp ./aws ${RUNNER_TEMP}/_github_home/bin/
           ls -l ${RUNNER_TEMP}/_github_home/bin
           chmod +x ${RUNNER_TEMP}/_github_home/bin/aws
           cat ${RUNNER_TEMP}/_github_home/bin/aws
