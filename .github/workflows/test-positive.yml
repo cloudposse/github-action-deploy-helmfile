@@ -1,0 +1,147 @@
+name: Test example positive
+on:
+#  # Uncomment when test added first time to register workflow and comment it back after workflow would be registered
+#  #
+#  # Added pull_request to register workflow from the PR.
+#  # Read more https://stackoverflow.com/questions/63362126/github-actions-how-to-run-a-workflow-created-on-a-non-master-branch-from-the-wo
+#  pull_request: {}
+  workflow_dispatch: {}
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup
+        run: echo "Do setup"
+
+  test:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: [setup]
+    services:
+      localstack:
+        image: localstack/localstack:1.3.1
+        credentials:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+        ports:
+          - 4566:4566
+          - 4510-4559:4510-4559
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get Docker network
+        id: docker-context
+        run: |
+          NETWORK_NAME=$(docker network ls --filter='name=github_network_*' --format "{{.Name}}")
+          echo "network=${NETWORK_NAME}" >> $GITHUB_OUTPUT
+
+      - name: "Create K8S Cluster"
+        uses: AbsaOSS/k3d-action@v2
+        id: k3s
+        with:
+          cluster-name: "default"
+          args: >-
+            -p "8083:80@agent:0:direct"
+            -p "8443:443@agent:0:direct"
+            -p "5053:53/udp@agent:0:direct"
+            -p "6443:6443@server:0:direct"
+            --agents 1
+            --no-lb
+            --network "${{ steps.docker-context.outputs.network }}"
+            --image docker.io/rancher/k3s:v1.23.2-k3s1
+
+      - name: Export kubeconfig
+        id: kubeconfig
+        run: |
+          mkdir -p ${RUNNER_TEMP}/_github_home
+          cp ~/.kube/config ${RUNNER_TEMP}/_github_home/kubeconfig
+          echo "path=/github/home/kubeconfig" >> $GITHUB_OUTPUT
+
+      - name: Update kubeconfig to work in docker network
+        uses: mikefarah/yq@v4.32.1
+        with:
+          cmd: yq -i '.clusters[0].cluster.server = "https://k3d-default-server-0:6443"' '/github/home/kubeconfig'
+
+      - name: 'Install jq 1.6'
+        uses: dcarbone/install-jq-action@v1.0.1
+        with:
+          version: 1.6
+          force: 'true'
+
+      - name: Mock platform context
+        run: |
+          aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} ssm put-parameter \
+            --name "/platform/default/staging/default_ingress_domain" \
+            --type "SecureString" \
+            --value "example.com"
+          
+          aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} ssm put-parameter \
+            --name "/platform/default/staging/default_alb_ingress_group" \
+            --type "SecureString" \
+            --value "default"
+
+          aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} ssm put-parameter \
+            --name "/platform/default/_metadata/kube_version" \
+            --type "SecureString" \
+            --value "1.15"
+        env:
+          AWS_ACCESS_KEY_ID: test
+          AWS_SECRET_ACCESS_KEY: test
+          AWS_DEFAULT_REGION: us-east-1
+          ## Use localhost to connect localstack because the commands runs not in a container
+          AWS_ENDPOINT_OVERRIDE: http://localhost:4566
+
+      - name: Mock AWS command
+        id: mock
+        run: |
+          mkdir -p ${RUNNER_TEMP}/_github_home/bin/
+          echo "exit 0;" >> ${RUNNER_TEMP}/_github_home/bin/aws 
+          chmod +x ${RUNNER_TEMP}/_github_home/bin/aws
+          cat ${RUNNER_TEMP}/_github_home/bin/aws
+          echo "path=/github/home/bin/:${RUNNER_TEMP}/bin/:${PATH}" >> $GITHUB_OUTPUT
+
+      - uses: ./
+        id: current
+        with:
+          helmfile-path: ./test
+          aws-region: us-east-1
+          cluster: default
+          environment: staging
+          namespace: staging
+          image: nginx
+          image-tag: latest
+          operation: deploy
+          debug: false
+        env:
+          PATH: ${{ steps.mock.outputs.path }}
+          PATH_OVERRIDE: ${{ steps.mock.outputs.path }}
+          KUBECONFIG: ${{ steps.kubeconfig.outputs.path }}
+          AWS_ACCESS_KEY_ID: test
+          AWS_SECRET_ACCESS_KEY: test
+          AWS_DEFAULT_REGION: us-east-1
+          ## Use localhost to connect localstack because the commands runs not in a container
+          AWS_ENDPOINT_OVERRIDE: http://localstack:4566
+          ## Use localstack to connect localstack because the chamber runs in a container
+          CHAMBER_AWS_SSM_ENDPOINT: http://localstack:4566/
+
+    outputs:
+      result: "${{ steps.current.outputs.webapp-url }}"
+
+  assert:
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+      - uses: nick-fields/assert-action@v1
+        with:
+          expected: 'https://example-app.example.com/dashboard'
+          actual: "${{ needs.test.outputs.result }}"
+
+  teardown:
+    runs-on: ubuntu-latest
+    needs: [assert]
+    if: ${{ always() }}
+    steps:
+      - name: Tear down
+        run: echo "Do Tear down"
