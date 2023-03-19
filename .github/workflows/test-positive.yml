@@ -31,14 +31,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - id: docker-context
+      - name: Get Docker network
+        id: docker-context
         run: |
           NETWORK_NAME=$(docker network ls --filter='name=github_network_*' --format "{{.Name}}")
           echo "network=${NETWORK_NAME}" >> $GITHUB_OUTPUT
 
-      - uses: AbsaOSS/k3d-action@v2
+      - name: "Create K8S Cluster"
+        uses: AbsaOSS/k3d-action@v2
         id: k3s
-        name: "Create Single Cluster"
         with:
           cluster-name: "default"
           args: >-
@@ -50,14 +51,15 @@ jobs:
             --no-lb
             --network "${{ steps.docker-context.outputs.network }}"
             --image docker.io/rancher/k3s:v1.23.2-k3s1
-#            --k3s-arg "--no-deploy=traefik,servicelb,metrics-server@server:*"
 
-      - run: |
+      - name: Export kubeconfig
+        id: kubeconfig
+        run: |
           mkdir -p ${RUNNER_TEMP}/_github_home
           cp ~/.kube/config ${RUNNER_TEMP}/_github_home/kubeconfig
-          echo "KUBECONFIG=/github/home/kubeconfig" >> $GITHUB_ENV
+          echo "path=/github/home/kubeconfig" >> $GITHUB_OUTPUT
 
-      - name: Update k3s server url
+      - name: Update kubeconfig to work in docker network
         uses: mikefarah/yq@v4.32.1
         with:
           cmd: yq -i '.clusters[0].cluster.server = "https://k3d-default-server-0:6443"' '/github/home/kubeconfig'
@@ -68,7 +70,8 @@ jobs:
           version: 1.6
           force: 'true'
 
-      - run: |
+      - name: Mock platform context
+        run: |
           aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} ssm put-parameter \
             --name "/platform/default/staging/default_ingress_domain" \
             --type "SecureString" \
@@ -114,6 +117,7 @@ jobs:
         env:
           PATH: ${{ steps.mock.outputs.path }}
           PATH_OVERRIDE: ${{ steps.mock.outputs.path }}
+          KUBECONFIG: ${{ steps.kubeconfig.outputs.path }}
           AWS_ACCESS_KEY_ID: test
           AWS_SECRET_ACCESS_KEY: test
           AWS_DEFAULT_REGION: us-east-1
