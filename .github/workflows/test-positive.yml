@@ -96,7 +96,7 @@ jobs:
       - name: Mock AWS command
         uses: 1arp/create-a-file-action@0.2
         with:
-          path: ${RUNNER_TEMP}/_github_home/bin/
+          path: /github/home/bin/
           file: aws
           content: |
             #!/bin/bash
