@@ -51,6 +51,7 @@ jobs:
             -p "8083:80@agent:0:direct"
             -p "8443:443@agent:0:direct"
             -p "5053:53/udp@agent:0:direct"
+            -p "6443:6443@server:0:direct"
             --agents 1
             --no-lb
             --network "${{ steps.docker-context.outputs.network }}"
