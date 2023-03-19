@@ -97,6 +97,8 @@ jobs:
           content: |
             #!/bin/bash
             
+            exit 0;
+            
             if [[ "$1" == "eks" ]]; then
               echo "Skip EKS related commands";
               exit 0;
@@ -108,7 +110,6 @@ jobs:
         run: |
           mkdir -p ${RUNNER_TEMP}/_github_home/bin/
           cp ./aws ${RUNNER_TEMP}/_github_home/bin/
-          ls -l ${RUNNER_TEMP}/_github_home/bin
           chmod +x ${RUNNER_TEMP}/_github_home/bin/aws
           cat ${RUNNER_TEMP}/_github_home/bin/aws
           echo "path=/github/home/bin/:${RUNNER_TEMP}/bin/:${PATH}" >> $GITHUB_OUTPUT
