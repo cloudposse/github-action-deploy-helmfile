@@ -56,7 +56,6 @@ jobs:
           mkdir -p ${RUNNER_TEMP}/_github_home
           cp ~/.kube/config ${RUNNER_TEMP}/_github_home/kubeconfig
           echo "KUBECONFIG=/github/home/kubeconfig" >> $GITHUB_ENV
-          cat ${RUNNER_TEMP}/_github_home/kubeconfig
 
       - name: Update k3s server url
         uses: mikefarah/yq@v4.32.1
