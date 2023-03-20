@@ -1,8 +1,8 @@
 FROM python:3.11.2-slim-buster
 
 ENV KUBECTL_VERSION 1.26.3
-ENV HELM_VERSION 3.7.2
-ENV HELMFILE_VERSION 0.142.0
+ENV HELM_VERSION 3.11.1
+ENV HELMFILE_VERSION 0.143.5
 ENV CHAMBER_VERSION 2.11.1
 # Helm plugins:
 # https://github.com/databus23/helm-diff/releases
