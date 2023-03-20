@@ -28,27 +28,24 @@ aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} eks --region
 # Read platform specific configs/info
 chamber export platform/${CLUSTER_NAME}/${ENVIRONMENT} --format yaml | yq --exit-status --no-colors  eval '{"platform": .}' - > /tmp/platform.yaml
 
-helm plugin list
-
 DEBUG_ARGS=""
 
 if [[ "${HELM_DEBUG}" == "true" ]]; then
-#	helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml template
 	DEBUG_ARGS=" --debug"
 fi
 
 if [[ -n "$HELM_VALUES_YAML" ]]; then
   echo -e "Using extra values:\n${HELM_VALUES_YAML}"
-  export HELM_VALUES_FILE="/tmp/extra_helm_values.yml"
+  HELM_VALUES_FILE="/tmp/extra_helm_values.yml"
   echo "$HELM_VALUES_YAML" > "$HELM_VALUES_FILE"
 fi
 
 if [[ "${OPERATION}" == "deploy" ]]; then
-	OPERATION_COMMAND="helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml $DEBUG_ARGS apply"
+	OPERATION_COMMAND="helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file ${APPLICATION_HELMFILE} ${HELM_VALUES_YAML:+--state-values-file /tmp/extra_helm_values.yml} --state-values-file /tmp/platform.yaml $DEBUG_ARGS apply"
 	echo "Executing: ${OPERATION_COMMAND}"
 	${OPERATION_COMMAND}
 
-	RELEASES=$(helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml list --output json | jq .[].name -r)
+	RELEASES=$(helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file ${APPLICATION_HELMFILE} ${HELM_VALUES_YAML:+--state-values-file /tmp/extra_helm_values.yml} --state-values-file /tmp/platform.yaml list --output json | jq .[].name -r)
 	for RELEASE in ${RELEASES}
   do
 	ENTRYPOINT=$(kubectl --namespace ${NAMESPACE} get -l ${RELEASE_LABEL_NAME}=${RELEASE} ingress --output=jsonpath='{.items[*].metadata.annotations.outputs\.webapp-url}')
@@ -66,7 +63,7 @@ elif [[ "${OPERATION}" == "destroy" ]]; then
 	set -e
 
 	if [[ ${NAMESPACE_EXISTS} -eq 0  ]]; then
-		OPERATION_COMMAND="helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml $DEBUG_ARGS destroy"
+		OPERATION_COMMAND="helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file ${APPLICATION_HELMFILE} ${HELM_VALUES_YAML:+--state-values-file /tmp/extra_helm_values.yml} --state-values-file /tmp/platform.yaml $DEBUG_ARGS destroy"
 		echo "Executing: ${OPERATION_COMMAND}"
 		${OPERATION_COMMAND}
 

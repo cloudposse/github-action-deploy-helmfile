@@ -13,7 +13,6 @@ ENV HELM_DIFF_VERSION 3.6.0
 # We expect this has been fixed now with helm-diff 3.3.2 + helm-git 0.11.1
 ENV HELM_GIT_VERSION 0.15.1
 
-
 ENV HELM_DATA_HOME   /root/.local/share/helm
 ENV HELM_CONFIG_HOME /root/.config/helm
 ENV HELM_CACHE_HOME  /root/.cache/helm
@@ -29,5 +28,4 @@ RUN apt-get update && apt-get install -y \
     	git=1:2.20.1-2+deb10u8
 
 COPY entrypoint.sh /usr/local/bin/entrypoint
-COPY ./root /
 ENTRYPOINT [ "/usr/local/bin/entrypoint" ]
