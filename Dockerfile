@@ -21,14 +21,7 @@ RUN apt-get update && apt-get install -y \
      	bash \
     	yq \
     	git \
-    	diffutils \
-    	chamber \
-    	helm \
-    	helmfile
-
-RUN helm plugin install https://github.com/databus23/helm-diff --version v${HELM_DIFF_VERSION} \
-    && helm plugin install https://github.com/aslafy-z/helm-git --version ${HELM_GIT_VERSION} \
-    && rm -rf $XDG_CACHE_HOME/helm
+    	diffutils
 
 COPY entrypoint.sh /usr/local/bin/entrypoint
 COPY ./root /
