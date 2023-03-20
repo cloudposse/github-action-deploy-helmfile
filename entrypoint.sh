@@ -2,21 +2,20 @@
 
 set -e
 
-if [ ! -z ${PATH_OVERRIDE+x} ];
-then
+if [ ! -z ${PATH_OVERRIDE+x} ]; then
 	export PATH=${PATH_OVERRIDE}:${PATH}
 fi;
 
 ## Install required versions
 apt-get update && apt-get install -y \
-    	kubectl=${KUBECTL_VERSION}-1 \
-    	chamber=${CHAMBER_VERSION}-1 \
-    	helm=${HELM_VERSION}-1 \
-    	helmfile=${HELMFILE_VERSION}-1
+	kubectl=${KUBECTL_VERSION}-1 \
+	chamber=${CHAMBER_VERSION}-1 \
+	helm=${HELM_VERSION}-1 \
+	helmfile=${HELMFILE_VERSION}-1
 
 helm plugin install https://github.com/databus23/helm-diff --version v${HELM_DIFF_VERSION} \
-    && helm plugin install https://github.com/aslafy-z/helm-git --version ${HELM_GIT_VERSION} \
-    && rm -rf $XDG_CACHE_HOME/helm
+	&& helm plugin install https://github.com/aslafy-z/helm-git --version ${HELM_GIT_VERSION} \
+	&& rm -rf $XDG_CACHE_HOME/helm
 
 # Used for debugging
 aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} sts --region ${AWS_REGION} get-caller-identity
