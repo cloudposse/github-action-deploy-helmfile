@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
      	bash \
     	yq \
     	git \
+    	diff \
     	chamber \
     	helm \
     	helmfile
