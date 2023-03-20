@@ -3,8 +3,14 @@ FROM python:3.11.2-slim-buster
 
 ENV HELM_VERSION 3.7.2
 ENV HELMFILE_VERSION 0.142.0
-#ENV HELM_DIFF_VERSION 3.1.3
-#ENV HELM_GIT_VERSION 0.8.1
+# Helm plugins:
+# https://github.com/databus23/helm-diff/releases
+ENV HELM_DIFF_VERSION 3.6.0
+# https://github.com/aslafy-z/helm-git/releases
+# We had issues with helm-diff 3.1.3 + helm-git 0.9.0,
+# previous workaround was to pin helm-git to version 0.8.1.
+# We expect this has been fixed now with helm-diff 3.3.2 + helm-git 0.11.1
+ENV HELM_GIT_VERSION 0.15.1
 
 RUN pip install awscli
 RUN apt-get update && apt-get install -y apt-utils curl
@@ -16,6 +22,10 @@ RUN apt-get update && apt-get install -y \
     	chamber \
     	helm \
     	helmfile
+
+RUN helm3 plugin install https://github.com/databus23/helm-diff.git --version v${HELM_DIFF_VERSION} \
+    && helm3 plugin install https://github.com/aslafy-z/helm-git.git --version ${HELM_GIT_VERSION} \
+    && rm -rf $XDG_CACHE_HOME/helm
 
 COPY entrypoint.sh /usr/local/bin/entrypoint
 COPY ./root /
