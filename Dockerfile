@@ -18,5 +18,4 @@ RUN apt-get update && apt-get install -y \
 
 COPY entrypoint.sh /usr/local/bin/entrypoint
 COPY ./root /
-
-CMD [ "-c", "entrypoint" ]
+ENTRYPOINT [ "/usr/local/bin/entrypoint" ]
