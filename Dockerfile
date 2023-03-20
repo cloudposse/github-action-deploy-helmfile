@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y apt-utils curl
 RUN curl -1sLf 'https://dl.cloudsmith.io/public/cloudposse/packages/cfg/setup/bash.deb.sh' | bash
 
 RUN apt-get update && apt-get install -y \
+     	bash \
     	chamber \
     	helm \
     	helmfile
