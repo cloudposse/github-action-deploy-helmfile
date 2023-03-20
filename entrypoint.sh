@@ -8,6 +8,8 @@ ls -l /root/.local/share/helm/plugins/helm-diff
 
 id
 
+export 
+
 if [ ! -z ${PATH_OVERRIDE+x} ];
 then
 	export PATH=${PATH_OVERRIDE}:${PATH}
