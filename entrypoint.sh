@@ -1,15 +1,21 @@
-#!/bin/bash -l
+#!/bin/bash
 
 set -e
 
-export APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
-
-source /etc/profile.d/aws.sh
-
-if [ ! -z ${PATH_OVERRIDE+x} ];
-then
-	export PATH=${PATH_OVERRIDE}
+if [ ! -z ${PATH_OVERRIDE+x} ]; then
+	export PATH=${PATH_OVERRIDE}:${PATH}
 fi;
+
+## Install required versions
+apt-get update && apt-get install -y \
+	kubectl=${KUBECTL_VERSION}-1 \
+	chamber=${CHAMBER_VERSION}-1 \
+	helm=${HELM_VERSION}-1 \
+	helmfile=${HELMFILE_VERSION}-1
+
+helm plugin install https://github.com/databus23/helm-diff --version v${HELM_DIFF_VERSION} \
+	&& helm plugin install https://github.com/aslafy-z/helm-git --version ${HELM_GIT_VERSION} \
+	&& rm -rf $XDG_CACHE_HOME/helm
 
 # Used for debugging
 aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} sts --region ${AWS_REGION} get-caller-identity
@@ -20,32 +26,34 @@ aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} eks --region
 # Read platform specific configs/info
 chamber export platform/${CLUSTER_NAME}/${ENVIRONMENT} --format yaml | yq --exit-status --no-colors  eval '{"platform": .}' - > /tmp/platform.yaml
 
-cat /tmp/platform.yaml
+APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
 
+BASIC_ARGS="--namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file ${APPLICATION_HELMFILE} --state-values-file /tmp/platform.yaml"
+EXTRA_VALUES_ARGS=""
 DEBUG_ARGS=""
 
 if [[ "${HELM_DEBUG}" == "true" ]]; then
-#	helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml template
 	DEBUG_ARGS=" --debug"
 fi
 
 if [[ -n "$HELM_VALUES_YAML" ]]; then
   echo -e "Using extra values:\n${HELM_VALUES_YAML}"
-  export HELM_VALUES_FILE="/tmp/extra_helm_values.yml"
+  HELM_VALUES_FILE="/tmp/extra_helm_values.yml"
   echo "$HELM_VALUES_YAML" > "$HELM_VALUES_FILE"
+  EXTRA_VALUES_ARGS="--state-values-file /tmp/extra_helm_values.yml"
 fi
 
 if [[ "${OPERATION}" == "deploy" ]]; then
-	OPERATION_COMMAND="helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml $DEBUG_ARGS apply"
+	OPERATION_COMMAND="helmfile ${BASIC_ARGS} ${EXTRA_VALUES_ARGS} ${DEBUG_ARGS} apply"
 	echo "Executing: ${OPERATION_COMMAND}"
 	${OPERATION_COMMAND}
 
-	RELEASES=$(helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml list --output json | jq .[].name -r)
+	RELEASES=$(helmfile ${BASIC_ARGS} ${EXTRA_VALUES_ARGS} ${DEBUG_ARGS} list --output json | jq .[].name -r)
 	for RELEASE in ${RELEASES}
   do
 	ENTRYPOINT=$(kubectl --namespace ${NAMESPACE} get -l ${RELEASE_LABEL_NAME}=${RELEASE} ingress --output=jsonpath='{.items[*].metadata.annotations.outputs\.webapp-url}')
 		if [[ "${ENTRYPOINT}" != "" ]]; then
-			echo "::set-output name=webapp-url::${ENTRYPOINT}"
+			echo "webapp-url=${ENTRYPOINT}" >> $GITHUB_OUTPUT
   	fi
   done
 
@@ -58,7 +66,7 @@ elif [[ "${OPERATION}" == "destroy" ]]; then
 	set -e
 
 	if [[ ${NAMESPACE_EXISTS} -eq 0  ]]; then
-		OPERATION_COMMAND="helmfile --namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file /deploy/helmfile.yaml $DEBUG_ARGS destroy"
+		OPERATION_COMMAND="helmfile ${BASIC_ARGS} ${EXTRA_VALUES_ARGS} ${DEBUG_ARGS} destroy"
 		echo "Executing: ${OPERATION_COMMAND}"
 		${OPERATION_COMMAND}
 
