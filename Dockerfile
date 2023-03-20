@@ -20,6 +20,7 @@ RUN curl -1sLf 'https://dl.cloudsmith.io/public/cloudposse/packages/cfg/setup/ba
 RUN apt-get update && apt-get install -y \
      	bash \
     	yq \
+    	git \
     	chamber \
     	helm \
     	helmfile
