@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y \
     	yq \
     	jq \
     	git \
+    	kubectl \
     	diffutils \
     	chamber \
     	helm \
