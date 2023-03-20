@@ -60,7 +60,7 @@ jobs:
           echo "path=/github/home/kubeconfig" >> $GITHUB_OUTPUT
 
       - name: Update kubeconfig to work in docker network
-        uses: mikefarah/yq@v4.32.1
+        uses: mikefarah/yq@v4.32.2
         with:
           cmd: yq -i '.clusters[0].cluster.server = "https://k3d-default-server-0:6443"' '/github/home/kubeconfig'
 
