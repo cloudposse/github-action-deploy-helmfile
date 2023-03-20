@@ -12,6 +12,7 @@ ENV HELM_DIFF_VERSION 3.6.0
 # We expect this has been fixed now with helm-diff 3.3.2 + helm-git 0.11.1
 ENV HELM_GIT_VERSION 0.15.1
 
+ENV HELM_DATA_HOME=/root/.local/share/helm
 
 RUN pip install awscli
 RUN apt-get update && apt-get install -y apt-utils curl
