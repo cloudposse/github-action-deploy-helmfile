@@ -4,10 +4,14 @@ set -e
 
 export APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
 
+export
+
 if [ ! -z ${PATH_OVERRIDE+x} ];
 then
 	export PATH=${PATH_OVERRIDE}
 fi;
+
+export
 
 # Used for debugging
 aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} sts --region ${AWS_REGION} get-caller-identity
