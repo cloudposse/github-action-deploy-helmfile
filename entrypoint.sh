@@ -2,6 +2,12 @@
 
 set -e
 
+if [ ! -z ${PATH_OVERRIDE+x} ];
+then
+	export PATH=${PATH_OVERRIDE}:${PATH}
+fi;
+
+## Install required versions
 apt-get update && apt-get install -y \
     	kubectl=${KUBECTL_VERSION}-1 \
     	chamber=${CHAMBER_VERSION}-1 \
@@ -12,13 +18,6 @@ helm plugin install https://github.com/databus23/helm-diff --version v${HELM_DIF
     && helm plugin install https://github.com/aslafy-z/helm-git --version ${HELM_GIT_VERSION} \
     && rm -rf $XDG_CACHE_HOME/helm
 
-export APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
-
-if [ ! -z ${PATH_OVERRIDE+x} ];
-then
-	export PATH=${PATH_OVERRIDE}:${PATH}
-fi;
-
 # Used for debugging
 aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} sts --region ${AWS_REGION} get-caller-identity
 
@@ -27,6 +26,8 @@ aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} eks --region
 
 # Read platform specific configs/info
 chamber export platform/${CLUSTER_NAME}/${ENVIRONMENT} --format yaml | yq --exit-status --no-colors  eval '{"platform": .}' - > /tmp/platform.yaml
+
+APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
 
 BASIC_ARGS="--namespace ${NAMESPACE} --environment ${ENVIRONMENT} --file ${APPLICATION_HELMFILE} --state-values-file /tmp/platform.yaml"
 EXTRA_VALUES_ARGS=""
