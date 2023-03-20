@@ -4,8 +4,6 @@ set -e
 
 export APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
 
-source /etc/profile.d/aws.sh
-
 if [ ! -z ${PATH_OVERRIDE+x} ];
 then
 	export PATH=${PATH_OVERRIDE}
