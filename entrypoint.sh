@@ -18,7 +18,7 @@ aws ${AWS_ENDPOINT_OVERRIDE:+--endpoint-url $AWS_ENDPOINT_OVERRIDE} eks --region
 # Read platform specific configs/info
 chamber export platform/${CLUSTER_NAME}/${ENVIRONMENT} --format yaml | yq --exit-status --no-colors  eval '{"platform": .}' - > /tmp/platform.yaml
 
-helm plugins list
+helm plugin list
 
 DEBUG_ARGS=""
 
