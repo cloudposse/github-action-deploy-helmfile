@@ -4,7 +4,7 @@ set -e
 
 export APPLICATION_HELMFILE=$(pwd)/${HELMFILE_PATH}/${HELMFILE}
 
-helm plugin list
+ls -l /root/.local/share/helm/plugins/helm-diff
 
 if [ ! -z ${PATH_OVERRIDE+x} ];
 then
