@@ -115,7 +115,6 @@ jobs:
           operation: deploy
           debug: false
         env:
-          PATH: ${{ steps.mock.outputs.path }}
           PATH_OVERRIDE: ${{ steps.mock.outputs.path }}
           KUBECONFIG: ${{ steps.kubeconfig.outputs.path }}
           AWS_ACCESS_KEY_ID: test
