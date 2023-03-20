@@ -11,6 +11,7 @@ ENV HELM_DIFF_VERSION 3.6.0
 # previous workaround was to pin helm-git to version 0.8.1.
 # We expect this has been fixed now with helm-diff 3.3.2 + helm-git 0.11.1
 ENV HELM_GIT_VERSION 0.15.1
+ENV KUBECTL_VERSION 0.15.1
 
 ENV HELM_DATA_HOME   /root/.local/share/helm
 ENV HELM_CONFIG_HOME /root/.config/helm
@@ -26,7 +27,6 @@ RUN apt-get update && apt-get install -y \
     	jq \
     	git \
     	kubectl \
-    	diffutils \
     	chamber \
     	helm \
     	helmfile
