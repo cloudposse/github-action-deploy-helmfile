@@ -24,8 +24,8 @@ RUN apt-get update && apt-get install -y \
     	helm \
     	helmfile
 
-RUN helm3 plugin install https://github.com/databus23/helm-diff.git --version v${HELM_DIFF_VERSION} \
-    && helm3 plugin install https://github.com/aslafy-z/helm-git.git --version ${HELM_GIT_VERSION} \
+RUN helm plugin install https://github.com/databus23/helm-diff.git --version v${HELM_DIFF_VERSION} \
+    && helm plugin install https://github.com/aslafy-z/helm-git.git --version ${HELM_GIT_VERSION} \
     && rm -rf $XDG_CACHE_HOME/helm
 
 COPY entrypoint.sh /usr/local/bin/entrypoint
