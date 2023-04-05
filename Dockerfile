@@ -1,4 +1,4 @@
-FROM python:3.11.2-slim-buster
+FROM python:3.11.3-slim-buster
 
 ENV KUBECTL_VERSION 1.26.3
 ENV HELM_VERSION 3.11.1
