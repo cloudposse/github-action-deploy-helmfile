@@ -1,4 +1,4 @@
-FROM python:3.11.2-slim-buster
+FROM public.ecr.aws/docker/library/python:3.11.2-slim-buster
 
 ENV KUBECTL_VERSION 1.26.3
 ENV HELM_VERSION 3.11.1
