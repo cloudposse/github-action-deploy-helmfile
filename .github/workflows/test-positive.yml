@@ -29,7 +29,7 @@ jobs:
           - 4510-4559:4510-4559
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Get Docker network
         id: docker-context
