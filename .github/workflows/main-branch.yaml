@@ -1,16 +1,21 @@
 name: Main branch
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - release/v*
+    paths-ignore:
+      - '.github/**'
+      - 'docs/**'
+      - 'examples/**'
+      - 'test/**'
+      - 'README.md'
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   perform:
     uses: cloudposse/github-actions-workflows-github-action-composite/.github/workflows/main-branch.yml@main
-    with:
-      organization: "${{ github.event.repository.owner.login }}"
-      repository: "${{ github.event.repository.name }}"
-    secrets:
-      github-private-actions-pat: "${{ secrets.PUBLIC_REPO_ACCESS_TOKEN }}"
+    secrets: inherit
