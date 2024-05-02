@@ -24,7 +24,7 @@ RUN curl -1sLf 'https://dl.cloudsmith.io/public/cloudposse/packages/cfg/setup/ba
 RUN apt-get update && apt-get install -y \
      	bash=5.0-4 \
     	yq=4.32.1-1 \
-    	jq=1.6 \
+    	jq \
     	git=1:2.20.1-2+deb10u8
 
 COPY entrypoint.sh /usr/local/bin/entrypoint
