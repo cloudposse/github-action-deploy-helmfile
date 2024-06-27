@@ -1,7 +1,7 @@
 
 
 <!-- markdownlint-disable -->
-<a href="https://cpco.io/homepage"><img src=".github/banner.png?raw=true" alt="Project Banner"/></a><br/>
+<a href="https://cpco.io/homepage"><img src="https://github.com/cloudposse/github-action-deploy-helmfile/blob/main/.github/banner.png?raw=true" alt="Project Banner"/></a><br/>
     <p align="right">
 <a href="https://github.com/cloudposse/github-action-deploy-helmfile/releases/latest"><img src="https://img.shields.io/github/release/cloudposse/github-action-deploy-helmfile.svg" alt="Latest Release"/></a><a href="https://slack.cloudposse.com"><img src="https://slack.cloudposse.com/badge.svg" alt="Slack Community"/></a></p>
 <!-- markdownlint-restore -->
