@@ -5,3 +5,4 @@ repository:
   description: 'Deploy on Kubernetes with Helmfile'
   homepage: https://cloudposse.com/accelerate
   topics: github-action
+
