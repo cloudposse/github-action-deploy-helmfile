@@ -13,8 +13,11 @@ ENV HELM_CACHE_HOME  /root/.cache/helm
 
 RUN pip install awscli
 
-# No need to modify sources.list if using a newer base image
-RUN apt-get update && apt-get install -y apt-utils curl
+# Replace HTTP with HTTPS in sources.list
+RUN sed -i 's|http://deb.debian.org|https://deb.debian.org|g' /etc/apt/sources.list
+
+# Update CA certificates and install required packages
+RUN apt-get update && apt-get install -y ca-certificates apt-utils curl
 
 RUN curl -1sLf 'https://dl.cloudsmith.io/public/cloudposse/packages/cfg/setup/bash.deb.sh' | bash
 
