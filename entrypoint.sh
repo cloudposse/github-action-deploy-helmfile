@@ -52,6 +52,7 @@ if [[ "${OPERATION}" == "deploy" ]]; then
   for RELEASE in ${RELEASES}
   do
     echo "Processing release: ${RELEASE}"
+    echo "Executing kubectl command: kubectl --namespace ${NAMESPACE} get -l ${RELEASE_LABEL_NAME}=${RELEASE} ${URL_RESOURCE_TYPE} -o json"
     ENTRYPOINT=$(kubectl --namespace ${NAMESPACE} get -l ${RELEASE_LABEL_NAME}=${RELEASE} ${URL_RESOURCE_TYPE} -o json | jq --raw-output '[.items[].metadata.annotations["outputs.webapp-url"]] | first')
     if [[ "${ENTRYPOINT}" != "" ]]; then
       echo "Found webapp-url for release ${RELEASE}: ${ENTRYPOINT}"
