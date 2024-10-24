@@ -49,12 +49,16 @@ if [[ "${OPERATION}" == "deploy" ]]; then
 	${OPERATION_COMMAND}
 
 	RELEASES=$(helmfile ${BASIC_ARGS} ${EXTRA_VALUES_ARGS} ${DEBUG_ARGS} list --output json | jq .[].name -r)
-	for RELEASE in ${RELEASES}
+  for RELEASE in ${RELEASES}
   do
-	ENTRYPOINT=$(kubectl --namespace ${NAMESPACE} get -l ${RELEASE_LABEL_NAME}=${RELEASE} ${URL_RESOURCE_TYPE} -o json | jq --raw-output '[.items[].metadata.annotations["outputs.webapp-url"]] | first')
-		if [[ "${ENTRYPOINT}" != "" ]]; then
-			echo "webapp-url=${ENTRYPOINT}" >> $GITHUB_OUTPUT
-  	fi
+    echo "Processing release: ${RELEASE}"
+    ENTRYPOINT=$(kubectl --namespace ${NAMESPACE} get -l ${RELEASE_LABEL_NAME}=${RELEASE} ${URL_RESOURCE_TYPE} -o json | jq --raw-output '[.items[].metadata.annotations["outputs.webapp-url"]] | first')
+    if [[ "${ENTRYPOINT}" != "" ]]; then
+      echo "Found webapp-url for release ${RELEASE}: ${ENTRYPOINT}"
+      echo "webapp-url=${ENTRYPOINT}" >> $GITHUB_OUTPUT
+    else
+      echo "No webapp-url found for release ${RELEASE}"
+    fi
   done
 
 
