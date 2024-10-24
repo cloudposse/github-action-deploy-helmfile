@@ -139,6 +139,7 @@ Destroy environment
 | namespace | Kubernetes namespace | N/A | true |
 | operation | Operation with helmfiles. (valid options - `deploy`, `destroy`) | deploy | true |
 | release\_label\_name | The name of the label used to describe the helm release | release | false |
+| url-resource-type | The type of the resource to get the URL from | ingress | false |
 | values\_yaml | YAML string with extra values to use in a helmfile deploy | N/A | false |
 
 
