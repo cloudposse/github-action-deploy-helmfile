@@ -2,8 +2,11 @@
 
 <!-- markdownlint-disable -->
 <a href="https://cpco.io/homepage"><img src="https://github.com/cloudposse/github-action-deploy-helmfile/blob/main/.github/banner.png?raw=true" alt="Project Banner"/></a><br/>
-    <p align="right">
-<a href="https://github.com/cloudposse/github-action-deploy-helmfile/releases/latest"><img src="https://img.shields.io/github/release/cloudposse/github-action-deploy-helmfile.svg" alt="Latest Release"/></a><a href="https://slack.cloudposse.com"><img src="https://slack.cloudposse.com/badge.svg" alt="Slack Community"/></a></p>
+
+
+<p align="right"><a href="https://github.com/cloudposse/github-action-deploy-helmfile/releases/latest"><img src="https://img.shields.io/github/release/cloudposse/github-action-deploy-helmfile.svg?style=for-the-badge" alt="Latest Release"/></a><a href="https://github.com/cloudposse/github-action-deploy-helmfile/commits"><img src="https://img.shields.io/github/last-commit/cloudposse/github-action-deploy-helmfile.svg?style=for-the-badge" alt="Last Updated"/></a><a href="https://cloudposse.com/slack"><img src="https://slack.cloudposse.com/for-the-badge.svg" alt="Slack Community"/></a>
+
+</p>
 <!-- markdownlint-restore -->
 
 <!--
@@ -117,38 +120,10 @@ Destroy environment
 
 
 
-<!-- markdownlint-disable -->
-
-## Inputs
-
-| Name | Description | Default | Required |
-|------|-------------|---------|----------|
-| aws-region | AWS region | us-east-1 | false |
-| chamber\_version | Kubectl version | 2.11.1 | false |
-| cluster | Cluster name | N/A | true |
-| debug | Debug mode | false | false |
-| environment | Helmfile environment | preview | false |
-| gitref-sha | Git SHA |  | false |
-| helm\_version | Helm version | 3.11.1 | false |
-| helmfile | Helmfile name | helmfile.yaml | false |
-| helmfile-path | The path where lives the helmfile. | deploy | false |
-| helmfile\_version | Helmfile version | 0.143.5 | false |
-| image | Docker image | N/A | true |
-| image-tag | Docker image tag | N/A | true |
-| kubectl\_version | Kubectl version | 1.26.3 | false |
-| namespace | Kubernetes namespace | N/A | true |
-| operation | Operation with helmfiles. (valid options - `deploy`, `destroy`) | deploy | true |
-| release\_label\_name | The name of the label used to describe the helm release | release | false |
-| url-resource-type | The type of the resource to get the URL from | ingress | false |
-| values\_yaml | YAML string with extra values to use in a helmfile deploy | N/A | false |
 
 
-## Outputs
 
-| Name | Description |
-|------|-------------|
-| webapp-url | Web Application url |
-<!-- markdownlint-restore -->
+
 
 
 ## Related Projects
@@ -189,7 +164,36 @@ In general, PRs are welcome. We follow the typical "fork-and-pull" Git workflow.
  5. **Push** your work back up to your fork
  6. Submit a **Pull Request** so that we can review your changes
 
-**NOTE:** Be sure to merge the latest changes from "upstream" before making a pull request!
+**NOTE:** Be sure to merge the latest changes from "upstream" before making a pull request!## Running Terraform Tests
+
+We use [Atmos](https://atmos.tools) to streamline how Terraform tests are run. It centralizes configuration and wraps common test workflows with easy-to-use commands.
+
+All tests are located in the [`test/`](test) folder.
+
+Under the hood, tests are powered by Terratest together with our internal [Test Helpers](https://github.com/cloudposse/test-helpers) library, providing robust infrastructure validation.
+
+Setup dependencies:
+- Install Atmos ([installation guide](https://atmos.tools/install/))
+- Install Go [1.24+ or newer](https://go.dev/doc/install)
+- Install Terraform or OpenTofu
+
+To run tests:
+
+- Run all tests:  
+  ```sh
+  atmos test run
+  ```
+- Clean up test artifacts:  
+  ```sh
+  atmos test clean
+  ```
+- Explore additional test options:  
+  ```sh
+  atmos test --help
+  ```
+The configuration for test commands is centrally managed. To review what's being imported, see the [`atmos.yaml`](https://raw.githubusercontent.com/cloudposse/.github/refs/heads/main/.github/atmos/terraform-module.yaml) file.
+
+Learn more about our [automated testing in our documentation](https://docs.cloudposse.com/community/contribute/automated-testing/) or implementing [custom commands](https://atmos.tools/core-concepts/custom-commands/) with atmos.
 
 ### 🌎 Slack Community
 
@@ -241,7 +245,7 @@ All other trademarks referenced herein are the property of their respective owne
 
 
 ---
-Copyright © 2017-2024 [Cloud Posse, LLC](https://cpco.io/copyright)
+Copyright © 2017-2025 [Cloud Posse, LLC](https://cpco.io/copyright)
 
 
 <a href="https://cloudposse.com/readme/footer/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-deploy-helmfile&utm_content=readme_footer_link"><img alt="README footer" src="https://cloudposse.com/readme/footer/img"/></a>
