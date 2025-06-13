@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/python:3.11.4-slim-bullseye
+FROM public.ecr.aws/docker/library/python:3.13.5-slim-bullseye
 
 ENV KUBECTL_VERSION 1.26.3
 ENV HELM_VERSION 3.11.1
