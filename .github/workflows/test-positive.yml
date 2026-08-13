@@ -37,7 +37,7 @@ jobs:
           - 4510-4559:4510-4559
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Get Docker network
         id: docker-context
@@ -144,7 +144,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test]
     steps:
-      - uses: nick-fields/assert-action@v2
+      - uses: nick-fields/assert-action@0efd6166067d9c59d89c710fab4f79fb066f8985 # v4.0.1
         with:
           expected: 'https://example-app.example.com/dashboard'
           actual: "${{ needs.test.outputs.result }}"
